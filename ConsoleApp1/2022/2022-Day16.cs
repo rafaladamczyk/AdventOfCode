@@ -72,14 +72,14 @@ namespace AdventOfCode2022
             var result2 = BestFlow(0, 0UL, 26, 1);
             Console.WriteLine($"{result2} - elapsed: {stopWatch.Elapsed}");
 
-            int BestFlow(int p, ulong valveState, int timeLeft, int guyNumber)
+            int BestFlow(int p, ulong valveState, int timeLeft, int guy)
             {
                 if (timeLeft == 0)
                 {
-                    return guyNumber > 0 ? BestFlow(0, valveState, 26, guyNumber - 1) : 0;
+                    return guy > 0 ? BestFlow(0, valveState, 26, guy - 1) : 0;
                 } 
                 
-                if (solutions.TryGetValue((p, valveState, timeLeft, guyNumber), out var existingResult))
+                if (solutions.TryGetValue((p, valveState, timeLeft, guy), out var existingResult))
                 {
                     return existingResult;
                 }
@@ -90,7 +90,7 @@ namespace AdventOfCode2022
                 if (nodes[p].flowRate > 0 && !GetValveState(valveState, p))
                 {
                     var thisFlow = (timeLeft - 1) * nodes[p].flowRate;
-                    var nextStep = BestFlow(p, OpenValve(valveState, p), timeLeft - 1, guyNumber);
+                    var nextStep = BestFlow(p, OpenValve(valveState, p), timeLeft - 1, guy);
                     var answer = thisFlow + nextStep;
                     bestAnswer = Math.Max(bestAnswer, answer);
                 }
@@ -98,11 +98,11 @@ namespace AdventOfCode2022
                 // travel to all neighbors
                 foreach (var destIndex in nodes[p].destinations)
                 {
-                    var nextStep = BestFlow(destIndex, valveState, timeLeft - 1, guyNumber);
+                    var nextStep = BestFlow(destIndex, valveState, timeLeft - 1, guy);
                     bestAnswer = Math.Max(bestAnswer, nextStep);
                 }
 
-                solutions[(p, valveState, timeLeft, guyNumber)] = bestAnswer;
+                solutions[(p, valveState, timeLeft, guy)] = bestAnswer;
                 return bestAnswer;
             }
         }

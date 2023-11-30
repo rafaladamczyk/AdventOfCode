@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using AdventOfCode;
+using ConsoleApp1.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Day13
+    public class Day13 : IAocDay
     {
         public class ListOfStuff
         {
@@ -105,62 +108,6 @@ namespace AdventOfCode2022
             return x.ToString();
         }
 
-        public static void Run()
-        {
-            List<ListOfStuff> input = new List<ListOfStuff>();
-
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-13.txt"))
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
-            {
-                using (var reader = new StreamReader(f))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        var list1 = ParseListOfStuff(reader.ReadLine());
-                        var list2 = ParseListOfStuff(reader.ReadLine());
-                        reader.ReadLine();
-
-                        input.Add(list1);
-                        input.Add(list2);
-                    }
-                }
-            }
-
-            var first = ParseListOfStuff("[[2]]");
-            var second = ParseListOfStuff("[[6]]");
-
-            first.Name = "first";
-            second.Name = "second";
-
-            input.Add(first);
-            input.Add(second);
-
-            input.Sort(new StuffComparer());
-
-            var firstIndex = -123;
-            var secondInex = -111;
-
-            for (int i = 0; i < input.Count; i++)
-            {
-                if (input[i].Name == "first")
-                {
-                    firstIndex = i + 1;
-                }
-
-                if (input[i].Name == "second")
-                {
-                    secondInex = i + 1;
-                }
-            }
-
-            foreach (var list in input)
-            {
-                Console.WriteLine(PrintList(list));
-            }
-
-            Console.WriteLine(firstIndex * secondInex);
-        }
-
         public static ListOfStuff ParseListOfStuff(string text)
         {
             ListOfStuff current = null;
@@ -217,6 +164,51 @@ namespace AdventOfCode2022
             }
 
             return current;
+        }
+
+        public async Task<object> Part1()
+        {
+            var lines = await Input.GetInput(2022, 13);
+            var input = lines.Select((line, index) => index % 3 == 0 ? null : line).Where(x => x != null).Select(ParseListOfStuff).ToList();
+
+            var first = ParseListOfStuff("[[2]]");
+            var second = ParseListOfStuff("[[6]]");
+
+            first.Name = "first";
+            second.Name = "second";
+
+            input.Add(first);
+            input.Add(second);
+
+            input.Sort(new StuffComparer());
+
+            var firstIndex = -123;
+            var secondInex = -111;
+
+            for (int i = 0; i < input.Count; i++)
+            {
+                if (input[i].Name == "first")
+                {
+                    firstIndex = i + 1;
+                }
+
+                if (input[i].Name == "second")
+                {
+                    secondInex = i + 1;
+                }
+            }
+
+            foreach (var list in input)
+            {
+                Console.WriteLine(PrintList(list));
+            }
+
+            return firstIndex * secondInex;
+        }
+
+        public Task<object> Part2()
+        {
+            return Part1(); // I don't remember but I think I overwrote Part 1 with Part 2 at some point
         }
     }
 }
