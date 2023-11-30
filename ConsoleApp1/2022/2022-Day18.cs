@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using AdventOfCode;
+using ConsoleApp1.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Day18
+    public class Day18 : IAocDay
     {
 
-        public static void Run()
+        public async Task<object> Part1()
         {
-
             var lavaCubes = new HashSet<(int x, int y, int z)>();
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-18.txt"))
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
+            var input = await Input.GetInput(2022, 18);
+            foreach (var numbers in input.Select(line => line.Split(',').Select(x => int.Parse(x.Trim())).ToArray()))
             {
-                using (var reader = new StreamReader(f))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        var nubmers = reader.ReadLine().Split(',').Select(x => int.Parse(x.Trim())).ToArray();
-                        lavaCubes.Add((nubmers[0], nubmers[1], nubmers[2]));
-                    }
-                }
+                lavaCubes.Add((numbers[0], numbers[1], numbers[2]));
             }
 
             int minx, miny, minz;
@@ -49,7 +43,7 @@ namespace AdventOfCode2022
 
             bool IsValidAir((int x, int y, int z) p)
             {
-                bool withinBounds = p.x >= minx && p.x <= maxx && p.y >=miny && p.y <= maxy && p.z >= minz && p.z <= maxz;
+                bool withinBounds = p.x >= minx && p.x <= maxx && p.y >= miny && p.y <= maxy && p.z >= minz && p.z <= maxz;
                 return withinBounds && !lavaCubes.Contains(p);
             }
 
@@ -116,7 +110,12 @@ namespace AdventOfCode2022
                 surfaceArea += exposedSides;
             }
 
-            Console.WriteLine(surfaceArea);
+            return surfaceArea;
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Part1();
         }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using AdventOfCode;
+using ConsoleApp1.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Day16
+    public class Day16 : IAocDay
     {
         private static List<Node> nodes = new List<Node>();
 
@@ -19,25 +21,30 @@ namespace AdventOfCode2022
             public List<string> destinationNames;
         }
 
-        public static void Run()
+        public async Task<object> Part1()
         {
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-16.txt"))
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
+            return await Run(1);
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Run(2);
+        }
+
+        public async Task<int> Run(int part)
+        {
+            var input = await Input.GetInput(2022, 16);
+            foreach (var inputLine in input)
             {
-                using (var reader = new StreamReader(f))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        var parts = reader.ReadLine().Split(' ');
-                        var valveName = parts[1].Trim();
-                        var flowRate =  int.Parse(parts[4].Split('=')[1].Trim(';'));
-                        var destinations = parts.Skip(9).Select(p => p.Trim(',').Trim()).ToList();
+                var parts = inputLine.Split(' ');
+                var valveName = parts[1].Trim();
+                var flowRate = int.Parse(parts[4].Split('=')[1].Trim(';'));
+                var destinations = parts.Skip(9).Select(p => p.Trim(',').Trim()).ToList();
 
-                        nodes.Add(new Node { name = valveName, flowRate = flowRate, destinationNames = destinations });
-                    }
-                }
+                nodes.Add(new Node { name = valveName, flowRate = flowRate, destinationNames = destinations });
+
             }
-
+            
             nodes = nodes.OrderByDescending(x => x.name == "AA").ThenByDescending(x => x.flowRate).ToList();
             foreach (var node in nodes)
             {
@@ -67,10 +74,14 @@ namespace AdventOfCode2022
             stopWatch.Start();
             var result = BestFlow(0, 0UL, 30, 0);
             Console.WriteLine($"{result} - elapsed: {stopWatch.Elapsed}");
+            if (part == 1)
+            {
+                return result;
+            }
 
-            stopWatch.Restart();
             var result2 = BestFlow(0, 0UL, 26, 1);
             Console.WriteLine($"{result2} - elapsed: {stopWatch.Elapsed}");
+            return result2;
 
             int BestFlow(int p, ulong valveState, int timeLeft, int guy)
             {

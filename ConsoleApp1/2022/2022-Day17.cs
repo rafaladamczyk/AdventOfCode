@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using AdventOfCode;
+using ConsoleApp1.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Day17
+    public class Day17 : IAocDay
     {
         public class Piece
         {
@@ -14,7 +17,8 @@ namespace AdventOfCode2022
             public ulong y;
             public Func<(int x, ulong y), IEnumerable<(int x, ulong y)>> GetPiecePositions;
         }
-        public static void Run()
+
+        public async Task<object> Part1()
         {
             char[] windMovements = null;
             List<Piece> pieces = new List<Piece>()
@@ -51,17 +55,8 @@ namespace AdventOfCode2022
             };
 
 
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-17.txt"))
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
-            {
-                using (var reader = new StreamReader(f))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        windMovements = reader.ReadLine().ToCharArray();
-                    }
-                }
-            }
+            var input = await Input.GetInput(2022, 17);
+            windMovements = input.Single().ToCharArray();
 
             var minX = 0;
             var maxX = 8;
@@ -72,7 +67,7 @@ namespace AdventOfCode2022
             var solids = new HashSet<(int x, ulong y)>();
             var highests = new List<ulong>() { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-            for (int i = minX+1; i < maxX; i++)
+            for (int i = minX + 1; i < maxX; i++)
             {
                 solids.Add((i, 0));
             }
@@ -185,7 +180,7 @@ namespace AdventOfCode2022
                     states.Clear();
                 }
 
-                states[key] = (nextPieceNumber -1, maxY, windTick);
+                states[key] = (nextPieceNumber - 1, maxY, windTick);
             }
 
             while (true)
@@ -202,7 +197,7 @@ namespace AdventOfCode2022
                     {
                         //Console.WriteLine(RenderTower());
                         Console.WriteLine(maxY);
-                        return;
+                        return maxY;
                     }
 
                     currentPiece = pieces[(int)(nextPieceNumber % 5)];
@@ -246,6 +241,12 @@ namespace AdventOfCode2022
 
                 windTick++;
             }
+
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Part1();
         }
     }
 }

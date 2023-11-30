@@ -169,7 +169,7 @@ namespace AoC2022
         public async Task<object> Part1()
         {
             var lines = await Input.GetInput(2022, 13);
-            var input = lines.Select((line, index) => index % 3 == 0 ? null : line).Where(x => x != null).Select(ParseListOfStuff).ToList();
+            var input = lines.Where(x => !string.IsNullOrEmpty(x)).Select(ParseListOfStuff).ToList();
 
             var first = ParseListOfStuff("[[2]]");
             var second = ParseListOfStuff("[[6]]");

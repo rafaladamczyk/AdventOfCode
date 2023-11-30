@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
+using AdventOfCode;
+using ConsoleApp1.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Line
+    public class Line
     {
         public int startX, startY;
         public int endX, endY;
     }
 
-    class Sand
+    public class Sand
     {
         public int x = 500;
         public int y = 0;
@@ -24,9 +22,9 @@ namespace AdventOfCode2022
         public bool rests = false;
     }
 
-    class Day14
+    public class Day14 : IAocDay
     {
-        public static void Run()
+        public async Task<object> Part1()
         {
             char[,] screen = new char[600, 200];
             Sand current = null;
@@ -42,40 +40,35 @@ namespace AdventOfCode2022
 
             var lines = new List<Line>();
             var maxY = 0;
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-14.txt"))
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
+            var input = await Input.GetInput(2022, 14);
+
+            foreach (var inputLine in input)
             {
-                using (var reader = new StreamReader(f))
+                var parts = inputLine.Split("->").Select(x => x.Trim()).ToList();
+                for (int i = 0; i < parts.Count - 1; i++)
                 {
-                    while (!reader.EndOfStream)
+                    var line = new Line()
                     {
-                        var parts = reader.ReadLine().Split("->").Select(x => x.Trim()).ToList();
-                        for (int i = 0; i < parts.Count - 1; i++)
-                        {
-                            var line = new Line()
-                            {
-                                startX = int.Parse(parts[i].Split(',')[0]),
-                                startY = int.Parse(parts[i].Split(',')[1]),
-                                endX = int.Parse(parts[i + 1].Split(',')[0]),
-                                endY = int.Parse(parts[i + 1].Split(',')[1])
-                            };
+                        startX = int.Parse(parts[i].Split(',')[0]),
+                        startY = int.Parse(parts[i].Split(',')[1]),
+                        endX = int.Parse(parts[i + 1].Split(',')[0]),
+                        endY = int.Parse(parts[i + 1].Split(',')[1])
+                    };
 
-                            if (line.startY > maxY)
-                            {
-                                maxY = line.startY;
-                            }
-
-                            if (line.endY > maxY)
-                            {
-                                maxY = line.endY;
-                            }
-
-                            lines.Add(line);
-                        }
+                    if (line.startY > maxY)
+                    {
+                        maxY = line.startY;
                     }
+
+                    if (line.endY > maxY)
+                    {
+                        maxY = line.endY;
+                    }
+
+                    lines.Add(line);
                 }
             }
-
+            
             foreach (var line in lines)
             {
                 DrawLine(line, screen);
@@ -162,6 +155,12 @@ namespace AdventOfCode2022
 
             Draw();
             Console.WriteLine(sands.Count);
+            return sands.Count;
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Part1(); // again Part2 seems to have replaced Part 1 here.
         }
 
         public static void DrawLine(Line line, char[,] screen)

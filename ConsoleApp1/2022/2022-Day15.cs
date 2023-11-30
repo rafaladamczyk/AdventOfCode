@@ -4,11 +4,49 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AdventOfCode;
+using ConsoleApp1.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Day15
+    public class Day15 : IAocDay
     {
+        public async Task<object> Part1()
+        {
+            const int limit = 4000000;
+
+            var input = await Input.GetInput(2022, 15);
+            var sensors = input.Select(inputLine => inputLine
+                    .Split(' ').Select(x => x.Trim()).ToList())
+                .Select(line => new Sensor
+                {
+                    x = int.Parse(line[2].Split('=')[1].Trim(',')),
+                    y = int.Parse(line[3].Split('=')[1].Trim(':')),
+                    closestBeaconX = int.Parse(line[8].Split('=')[1].Trim(',')),
+                    closestBeaconY = int.Parse(line[9].Split('=')[1].Trim())
+                }).ToList();
+
+            var timer = new Stopwatch();
+            timer.Start();
+
+            Parallel.For(0, limit, i =>
+            {
+                var ranges = sensors.Select(s => s.GetNoBeaconsRange(limit, i));
+                var combinedRanges = CombineRanges(ranges.Where(r => r != null).Cast<(int, int)>());
+                if (combinedRanges.Count > 1)
+                {
+                    Debug.Assert(combinedRanges.Count == 2);
+
+                    var ordered = combinedRanges.OrderBy(r => r.start);
+                    var jackpot = ordered.First().end + 1;
+                    Console.WriteLine(
+                        $"x:{jackpot}, y:{i} - frequency: {(ulong)jackpot * 4000000UL + (ulong)i} - elapsed: {timer.Elapsed}");
+                }
+            });
+
+            return string.Empty;
+        }
+
         class Sensor
         {
             public int x, y;
@@ -29,47 +67,6 @@ namespace AdventOfCode2022
 
                 return (noBeaconForSureStart, noBeaconForSureEnd);
             }
-        }
-
-        public static void Run()
-        {
-            var sensors = new List<Sensor>();
-
-            const int limit = 4000000;
-
-            using var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-15.txt");
-            using var reader = new StreamReader(f);
-            while (!reader.EndOfStream)
-            {
-                var line = reader.ReadLine().Split(' ').Select(x => x.Trim()).ToList();
-                var sensor = new Sensor()
-                {
-                    x = int.Parse(line[2].Split('=')[1].Trim(',')),
-                    y = int.Parse(line[3].Split('=')[1].Trim(':')),
-                    closestBeaconX = int.Parse(line[8].Split('=')[1].Trim(',')),
-                    closestBeaconY = int.Parse(line[9].Split('=')[1].Trim())
-                };
-
-                sensors.Add(sensor);
-            }
-
-            var timer = new Stopwatch();
-            timer.Start();
-
-            Parallel.For(0, limit,i =>
-            {
-                var ranges = sensors.Select(s => s.GetNoBeaconsRange(limit, i));
-                var combinedRanges = CombineRanges(ranges.Where(r => r != null).Cast<(int, int)>());
-                if (combinedRanges.Count > 1)
-                {
-                    Debug.Assert(combinedRanges.Count == 2);
-                    
-                    var ordered = combinedRanges.OrderBy(r => r.start);
-                    var jackpot = ordered.First().end + 1;
-                    Console.WriteLine(
-                        $"x:{jackpot}, y:{i} - frequency: {(ulong)jackpot * 4000000UL + (ulong)i} - elapsed: {timer.Elapsed}");
-                }
-            });
         }
 
         private static ISet<(int start, int end)> CombineRanges(IEnumerable<(int, int)> ranges)
@@ -117,6 +114,11 @@ namespace AdventOfCode2022
 
                 return (false, (-1, -1));
             }
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Part1(); //part1 is gone, only part2 remains
         }
     }
 }

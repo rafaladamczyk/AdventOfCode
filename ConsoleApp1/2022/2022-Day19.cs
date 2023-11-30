@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using AdventOfCode;
+using ConsoleApp1.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
     public class Blueprint
     {
@@ -46,26 +47,21 @@ namespace AdventOfCode2022
         }
     }
 
-    class Day19
+    public class Day19 : IAocDay
     {
         private static List<Blueprint> blueprints = new List<Blueprint>();
         private static Dictionary<(int, State), int> ScoresByState = new Dictionary<(int, State), int>();
 
         private static List<RobotType> robotTypes = new List<RobotType>()
             { RobotType.Ore, RobotType.Clay, RobotType.Obs, RobotType.Geode };
-        
-        public static void Run()
+
+
+        public async Task<object> Part1()
         {
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-19.txt"))
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
+            var input = await Input.GetInput(2022, 19);
+            foreach (var line in input)
             {
-                using (var reader = new StreamReader(f))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        ReadInput(reader);
-                    }
-                }
+                ReadInput(line);
             }
 
             var x = new Stopwatch();
@@ -82,6 +78,12 @@ namespace AdventOfCode2022
 
             Console.WriteLine(answer);
             Console.WriteLine($"elapsed {x.Elapsed}");
+            return answer;
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Part1();
         }
 
         private static int best = 0;
@@ -351,10 +353,10 @@ namespace AdventOfCode2022
             ScoresByState[(timeLeft, currentState)] = ans;
             return ans;
         }
-        private static void ReadInput(StreamReader reader)
+        private static void ReadInput(string line)
         {
             var bp = new Blueprint();
-            var x = reader.ReadLine().Split(':')[1];
+            var x = line.Split(':')[1];
             
             var robotTypes = x.Split('.', StringSplitOptions.RemoveEmptyEntries);
             foreach (var robotTypeInput in robotTypes)
