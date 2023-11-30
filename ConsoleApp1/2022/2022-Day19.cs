@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AdventOfCode;
-using ConsoleApp1.Utils;
+using AdventOfCode.Utils;
 
 namespace AoC2022
 {

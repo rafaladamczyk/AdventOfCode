@@ -2,30 +2,76 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading.Tasks;
+using AdventOfCode;
+using AdventOfCode.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Day23
-    { public static void Run()
+    public class Day23 : IAocDay
+    { 
+        private static void Print(HashSet<(int, int)> elfs)
         {
-            List<string> input = new List<string>();
-            var rowLength = 0;
+            var minX = 999999;
+            var minY = 9999999;
+            var maxY = -999999;
+            var maxX = -9999999;
 
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-23.txt"))
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
+            foreach (var elf in elfs)
             {
-                using (var reader = new StreamReader(f))
+                if (elf.Item1 > maxX)
                 {
-                    while (!reader.EndOfStream)
-                    {
-                        input.Add(reader.ReadLine());
-                        rowLength = input[0].Length;
-                    }
+                    maxX = elf.Item1;
+                }
+
+                if (elf.Item2 > maxY)
+                {
+                    maxY = elf.Item2;
+                }
+
+                if (elf.Item1 < minX)
+                {
+                    minX = elf.Item1;
+                }
+
+                if (elf.Item2 < minY)
+                {
+                    minY = elf.Item2;
                 }
             }
+
+            var area = (Math.Abs(maxX - minX) + 1) * (Math.Abs(maxY - minY) + 1);
+            var emptyTiles = area - elfs.Count;
+
+            StringBuilder screen = new StringBuilder();
+            for (int y = minY; y <= maxY; y++)
+            {
+                StringBuilder sb = new StringBuilder();
+                for (int x = minX; x <= maxX; x++)
+                {
+                    if (elfs.Contains((x, y)))
+                    {
+                        sb.Append('#');
+                    }
+                    else
+                    {
+                        sb.Append('.');
+                    }
+                }
+
+                screen.AppendLine(sb.ToString());
+            }
+
+            Console.WriteLine(screen.ToString());
+            Console.WriteLine($"AREA: {area}   X: {minX} - {maxX}   Y: {minY} - {maxY}");
+            Console.WriteLine(emptyTiles);
+        }
+
+        public async Task<object> Part1()
+        {
+            var input = await Input.GetInput(2022, 23);
+            var rowLength = input.First().Length;
 
             var map = new char[rowLength, input.Count];
             var elfs = new HashSet<(int, int)>();
@@ -97,7 +143,7 @@ namespace AdventOfCode2022
                 {
                     Print(elfs);
                     Console.WriteLine($"finished after round {roundsCounter + 1}");
-                    break;
+                    return roundsCounter + 1;
                 }
 
                 foreach (var elf in elfs)
@@ -130,7 +176,7 @@ namespace AdventOfCode2022
                         elfs.Add(newPos);
                     }
                 }
-                
+
                 roundsCounter++;
 
                 //Console.Clear();
@@ -145,61 +191,9 @@ namespace AdventOfCode2022
             }
         }
 
-        private static void Print(HashSet<(int, int)> elfs)
+        public async Task<object> Part2()
         {
-            var minX = 999999;
-            var minY = 9999999;
-            var maxY = -999999;
-            var maxX = -9999999;
-
-            foreach (var elf in elfs)
-            {
-                if (elf.Item1 > maxX)
-                {
-                    maxX = elf.Item1;
-                }
-
-                if (elf.Item2 > maxY)
-                {
-                    maxY = elf.Item2;
-                }
-
-                if (elf.Item1 < minX)
-                {
-                    minX = elf.Item1;
-                }
-
-                if (elf.Item2 < minY)
-                {
-                    minY = elf.Item2;
-                }
-            }
-
-            var area = (Math.Abs(maxX - minX) + 1) * (Math.Abs(maxY - minY) + 1);
-            var emptyTiles = area - elfs.Count;
-
-            StringBuilder screen = new StringBuilder();
-            for (int y = minY; y <= maxY; y++)
-            {
-                StringBuilder sb = new StringBuilder();
-                for (int x = minX; x <= maxX; x++)
-                {
-                    if (elfs.Contains((x, y)))
-                    {
-                        sb.Append('#');
-                    }
-                    else
-                    {
-                        sb.Append('.');
-                    }
-                }
-
-                screen.AppendLine(sb.ToString());
-            }
-
-            Console.WriteLine(screen.ToString());
-            Console.WriteLine($"AREA: {area}   X: {minX} - {maxX}   Y: {minY} - {maxY}");
-            Console.WriteLine(emptyTiles);
+            return await Part1();
         }
     }
 }

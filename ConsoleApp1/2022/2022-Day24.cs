@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
+using AdventOfCode;
+using AdventOfCode.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
     [StructLayout(LayoutKind.Explicit)]
     public struct Blizzard
@@ -16,22 +18,13 @@ namespace AdventOfCode2022
         [FieldOffset(2)] public byte dir;
     }
 
-    class Day24
+    public class Day24 : IAocDay
     {
-        public static void Run()
+        public async Task<object> Part1()
         {
             char[,] map;
             List<Blizzard> blizzards = new List<Blizzard>();
-            List<string> lines = new List<string>();
-
-            using var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-24.txt");
-            //using var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt");
-            using var reader = new StreamReader(f);
-            while (!reader.EndOfStream)
-            {
-                var line = reader.ReadLine();
-                lines.Add(line);
-            }
+            var lines = await Input.GetInput(2022, 24);
 
             var rowLength = lines[0].Length;
             var colLength = lines.Count;
@@ -305,6 +298,13 @@ namespace AdventOfCode2022
             Console.WriteLine($"There again: {globalBest} minutes");
 
             Console.WriteLine($"Total: {a + b + c}");
+
+            return a + b + c;
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Part1();
         }
     }
 }

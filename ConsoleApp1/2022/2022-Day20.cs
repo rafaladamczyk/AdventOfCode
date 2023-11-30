@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using AdventOfCode;
+using AdventOfCode.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Day20
+    public class Day20 : IAocDay 
     {
         public class Number
         {
@@ -96,43 +98,44 @@ namespace AdventOfCode2022
 
         public static List<Number> numbers = new List<Number>();
 
-        public static void Run()
+        public async Task<object> Part1()
         {
+            return await Run(1, 1);
+        }
 
+        public async Task<object> Part2()
+        {
+            return await Run(811589153, 10);
+        }
+
+        public async Task<object> Run(long mul, int mixes)
+        {
             Number first = null;
             Number prev = null;
+            numbers.Clear();
 
-            int iters = 10;
-            long mul = 811589153;
-            //long mul = 1;
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-20.txt"))
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
+            var input = await Input.GetInput(2022, 20);
+            foreach (var line in input)
             {
-                using (var reader = new StreamReader(f))
+                var inputNumber = int.Parse(line.Trim());
+                if (prev == null)
                 {
-                    while (!reader.EndOfStream)
-                    {
-                        var inputNumber = int.Parse(reader.ReadLine().Trim());
-                        if (prev == null)
-                        {
-                            first = new Number { X = inputNumber * mul };
-                            numbers.Add(first);
-                            prev = first;
-                        }
-                        else
-                        {
-                            prev.Next = new Number { X = inputNumber * mul, Previous = prev};
-                            numbers.Add(prev.Next);
-                            prev = prev.Next;
-                        }
-                    }
-
-                    prev.Next = first;
-                    first.Previous = prev;
+                    first = new Number { X = inputNumber * mul };
+                    numbers.Add(first);
+                    prev = first;
+                }
+                else
+                {
+                    prev.Next = new Number { X = inputNumber * mul, Previous = prev };
+                    numbers.Add(prev.Next);
+                    prev = prev.Next;
                 }
             }
 
-            for (int i = 0; i < iters; i++)
+            prev.Next = first;
+            first.Previous = prev;
+
+            for (int i = 0; i < mixes; i++)
             {
                 foreach (var number in numbers)
                 {
@@ -147,7 +150,8 @@ namespace AdventOfCode2022
             var b = zero.GetNextNumber(2000, false);
             var c = zero.GetNextNumber(3000, false);
 
-            Console.WriteLine(a.X +b.X +c.X);
+            return (a.X + b.X + c.X);
+
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AdventOfCode;
-using ConsoleApp1.Utils;
+using AdventOfCode.Utils;
 
 namespace AoC2021
 {

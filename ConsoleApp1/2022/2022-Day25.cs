@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using AdventOfCode;
+using AdventOfCode.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-    class Day25
+    public class Day25 : IAocDay
     {
-        public static void Run()
+        public async Task<object> Part1()
         {
-            using var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-25.txt");
-            //using var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt");
-            using var reader = new StreamReader(f);
+            var input = await Input.GetInput(2022, 25);
             ulong acc = 0;
             var maxNumLen = 0;
 
-            while (!reader.EndOfStream)
+            foreach (var number in input.Select(line => line.ToCharArray()))
             {
-                var number = reader.ReadLine().ToCharArray();
                 maxNumLen = Math.Max(maxNumLen, number.Length);
                 for (int i = 0; i < number.Length; i++)
                 {
-                    var c= (ulong) (number[number.Length - 1 - i]);
+                    var c = (ulong)(number[number.Length - 1 - i]);
                     int digit = -9999;
                     switch (c)
                     {
@@ -43,7 +43,7 @@ namespace AdventOfCode2022
                             break;
                     }
 
-                    ulong component = (ulong) (digit * Math.Pow(5, i));
+                    ulong component = (ulong)(digit * Math.Pow(5, i));
                     acc += component;
                 }
             }
@@ -56,7 +56,7 @@ namespace AdventOfCode2022
 
                 for (int i = maxNumLen + 1; i >= 0; i--)
                 {
-                    var digit = (int) (remainder / Math.Pow(5, i));
+                    var digit = (int)(remainder / Math.Pow(5, i));
                     remainder = (ulong)(number % Math.Pow(5, i));
                     digits.Add(digit);
                 }
@@ -105,6 +105,13 @@ namespace AdventOfCode2022
             var x = Numberino(acc);
             Console.WriteLine(acc);
             Console.WriteLine(x);
+
+            return x;
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Part2();
         }
     }
 }

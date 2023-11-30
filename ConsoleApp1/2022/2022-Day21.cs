@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using AdventOfCode;
+using AdventOfCode.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
     public class Monkey
     {
@@ -18,31 +21,25 @@ namespace AdventOfCode2022
 
     }
     
-    class Day21
+    public class Day21 : IAocDay
     {
         public static Dictionary<string, Monkey> monkeys = new Dictionary<string, Monkey>();
-        public static void Run()
+
+        public async Task<object> Part1()
         {
-            using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-21.txt"))
-            //using (var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt"))
+            var input = await Input.GetInput(2022, 21);
+            foreach (var line in input.Select(x => x.Split(':')))
             {
-                using (var reader = new StreamReader(f))
+                var monkeyName = line[0].Trim();
+                if (long.TryParse(line[1].Trim(), out var yell))
                 {
-                    while (!reader.EndOfStream)
-                    {
-                        var line = reader.ReadLine().Split(':');
-                        var monkeyName = line[0].Trim();
-                        if (long.TryParse(line[1].Trim(), out var yell))
-                        {
-                            monkeys[monkeyName] = new Monkey() { name = monkeyName, yell = yell, operation = null};
-                        }
-                        else
-                        {
-                            var parts = line[1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                            monkeys[monkeyName] = new Monkey()
-                                { name = monkeyName, operation = monkeyName == "root" ? "=" : parts[1], arguments = new[] { parts[0], parts[2] } };
-                        }
-                    }
+                    monkeys[monkeyName] = new Monkey() { name = monkeyName, yell = yell, operation = null };
+                }
+                else
+                {
+                    var parts = line[1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    monkeys[monkeyName] = new Monkey()
+                        { name = monkeyName, operation = monkeyName == "root" ? "=" : parts[1], arguments = new[] { parts[0], parts[2] } };
                 }
             }
 
@@ -67,7 +64,7 @@ namespace AdventOfCode2022
                             monkey.descendant1.reverseOperation = "-";
                             monkey.descendant2.reverseOperation = "-";
                             break;
-                        
+
                         case "-":
                             monkey.descendant1.reverseOperation = "+";
                             monkey.descendant2.reverseOperation = "+";
@@ -88,11 +85,18 @@ namespace AdventOfCode2022
                     }
                 }
             }
-            
+
             var score = Backwards("humn");
             Console.WriteLine($"{score} <--");
+            return score;
         }
 
+        public async Task<object> Part2()
+        {
+            return await Part1();
+        }
+
+        
         public static long Backwards(string monkeyName)
         {
             if (monkeyName == monkeys["root"].arguments[1])

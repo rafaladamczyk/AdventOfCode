@@ -1,5 +1,4 @@
-﻿using AdventOfCode2022;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,34 +7,20 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using File = System.IO.File;
 
-namespace ConsoleApp1.Utils
+namespace AdventOfCode.Utils
 {
     public static class Input
     {
         public static async Task<List<string>> GetInput(int year, int day)
         {
-            const string topLevelPath = "../../../";
-            var inputsDirectory = Directory.CreateDirectory(Path.Combine(topLevelPath, "Inputs", year.ToString()));
-            var localFileName = Path.Combine(inputsDirectory.FullName, $"{day}.txt");
-            var session = Environment.GetEnvironmentVariable("aoc_session");
-
-            var localFile = new FileInfo(localFileName);
-
-            if (!localFile.Exists || localFile.Length == 0)
-            {
-                await DownloadInput(session, localFileName, year, day);
-            }
-
-            using var f = File.OpenRead(localFileName);
-            return SplitIntoLines(f).ToList();
+            using var stream = await GetInputStream(year, day);
+            return SplitIntoLines(stream).ToList();
         }
 
-        public static IEnumerable<string> GetExampleInput()
+        public static async Task<List<string>> GetExampleInput()
         {
-            const string topLevelPath = "../../../";
-            var inputsDirectory = Directory.CreateDirectory(Path.Combine(topLevelPath, "Inputs"));
-            using var f = File.OpenRead(Path.Combine(inputsDirectory.FullName, "ExampleInput.txt"));
-            return SplitIntoLines(f);
+            using var stream = await GetExampleStream();
+            return SplitIntoLines(stream).ToList();
         }
 
         private static IEnumerable<string> SplitIntoLines(Stream stream)
@@ -70,6 +55,30 @@ namespace ConsoleApp1.Utils
 
             using var contentStream = await response.Content.ReadAsStreamAsync();
             await contentStream.CopyToAsync(newFile);
+        }
+
+        public static async Task<Stream> GetInputStream(int year, int day)
+        {
+            const string topLevelPath = "../../../";
+            var inputsDirectory = Directory.CreateDirectory(Path.Combine(topLevelPath, "Inputs", year.ToString()));
+            var localFileName = Path.Combine(inputsDirectory.FullName, $"{day}.txt");
+            var session = Environment.GetEnvironmentVariable("aoc_session");
+
+            var localFile = new FileInfo(localFileName);
+
+            if (!localFile.Exists || localFile.Length == 0)
+            {
+                await DownloadInput(session, localFileName, year, day);
+            }
+
+            return File.OpenRead(localFileName);
+        }
+
+        public static async Task<Stream> GetExampleStream()
+        {
+            const string topLevelPath = "../../../";
+            var inputsDirectory = Directory.CreateDirectory(Path.Combine(topLevelPath, "Inputs"));
+            return File.OpenRead(Path.Combine(inputsDirectory.FullName, "ExampleInput.txt"));
         }
     }
 }

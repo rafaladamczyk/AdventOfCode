@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using AdventOfCode;
+using AdventOfCode.Utils;
 
-namespace AdventOfCode2022
+namespace AoC2022
 {
-
-    class Day22
+    public class Day22 : IAocDay
     {
         public static Dictionary<(int, int), Node> Nodes = new Dictionary<(int, int), Node>();
 
@@ -15,13 +17,10 @@ namespace AdventOfCode2022
 
         private const int CubeSideLength = 50;
 
-        public static void Run()
+        public async Task<object> Part1()
         {
-            
-            //using var f = File.OpenRead(@"C:\Users\Raf\Downloads\example.txt");
-            using var f = File.OpenRead(@"C:\Users\Raf\Downloads\input-22.txt");
-            using var reader = new StreamReader(f);
-
+            using var stream= await Input.GetInputStream(2022, 22);
+            using var reader = new StreamReader(stream);
 
             ReadInput(reader);
 
@@ -30,11 +29,11 @@ namespace AdventOfCode2022
             var start = Nodes.Values.Where(x => x.faceNumber == 1).OrderBy(node => node.x).ThenBy(node => node.y)
                 .First();
             (int x, int y, char direction) currentPosition = (start.x, start.y, 'R');
-    
+
             bool IsNotDir(char x)
             {
                 temp = x;
-                return x != 'U' && x != 'D' && x!= 'L' && x != 'R';
+                return x != 'U' && x != 'D' && x != 'L' && x != 'R';
             }
 
             while (!reader.EndOfStream)
@@ -50,7 +49,7 @@ namespace AdventOfCode2022
                     {
                         var stepsCount = int.Parse(steps);
                         currentPosition = Node.Go(currentPosition, stepsCount);
-                        
+
                         turn = temp;
 
                         currentPosition.direction = ApplyTurn(currentPosition.direction, turn);
@@ -65,6 +64,12 @@ namespace AdventOfCode2022
             Console.WriteLine($"I arrived at {currentPosition.x + 1},{currentPosition.y + 1}");
             var score = (1000 * (currentPosition.y + 1)) + 4 * (currentPosition.x + 1) + GetDirectionScore(currentPosition.direction);
             Console.WriteLine($"Score: {score}");
+            return score;
+        }
+
+        public async Task<object> Part2()
+        {
+            return await Part1();
         }
 
         public class Node
