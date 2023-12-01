@@ -4,7 +4,7 @@ using AdventOfCode.Utils;
 
 namespace AoC2023
 {
-    public class Day : IAocDay
+    public class Day2 : IAocDay
     {
         public async Task<object> Part1()
         {
