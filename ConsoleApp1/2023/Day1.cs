@@ -18,7 +18,6 @@ namespace AoC2023
 
         public async Task<object> Part2()
         {
-            var digits = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
             var input = await Input.GetInput(2023, 1);
             var numbers = new List<int>();
             foreach (var line in input)
@@ -53,16 +52,7 @@ namespace AoC2023
                     return int.Parse($"{s[i]}");
                 }
 
-                for (int j = 0; j < digits.Length; j++)
-                {
-                    if (s.Substring(i).StartsWith(digits[j]))
-                    {
-                        return j;
-                    }
-
-                }
-
-                return null;
+                return s.Substring(i).GetDigitFromStringStart();
             }
         }
     }
