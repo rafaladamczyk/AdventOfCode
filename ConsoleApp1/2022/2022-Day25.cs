@@ -111,7 +111,7 @@ namespace AoC2022
 
         public async Task<object> Part2()
         {
-            return await Part2();
+            return await Part1();
         }
     }
 }

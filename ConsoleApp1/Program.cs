@@ -8,6 +8,23 @@ namespace AdventOfCode
 {
     class Program
     {
+        private static readonly List<IAocDay> Days2022 = new List<IAocDay>()
+        {
+            new AoC2022.Day13(),
+            new AoC2022.Day14(),
+            new AoC2022.Day15(),
+            new AoC2022.Day16(),
+            new AoC2022.Day17(),
+            new AoC2022.Day18(),
+            new AoC2022.Day19(),
+            new AoC2022.Day20(),
+            new AoC2022.Day21(),
+            new AoC2022.Day22(),
+            new AoC2022.Day23(),
+            new AoC2022.Day24(),
+            new AoC2022.Day25(),
+        };
+
         private static readonly List<IAocDay> Days = new List<IAocDay>()
         {
             new Day1(),
@@ -24,7 +41,7 @@ namespace AdventOfCode
 
         static async Task Main(string[] args)
         {
-            var reversed = Days.ToList();
+            var reversed = Days2022.ToList();
             reversed.Reverse();
 
             foreach (var day in reversed)
