@@ -9,8 +9,10 @@ using File = System.IO.File;
 
 namespace AdventOfCode.Utils
 {
-    public static class Input
+    public static class IO
     {
+        private static readonly string Session = Environment.GetEnvironmentVariable("aoc_session");
+
         public static async Task<List<string>> GetInput(int year, int day)
         {
             using var stream = await GetInputStream(year, day);
@@ -32,20 +34,16 @@ namespace AdventOfCode.Utils
             }
         }
 
-        private static async Task DownloadInput(string session, string localFileName, int year, int day)
+        private static async Task DownloadInput(string localFileName, int year, int day)
         {
-            if (string.IsNullOrWhiteSpace(session))
+            if (string.IsNullOrWhiteSpace(Session))
             {
                 throw new Exception("no session in ENV");
             }
 
-            var baseUri = new Uri("https://adventofcode.com");
-            var cookieContainer = new CookieContainer();
-            cookieContainer.Add(baseUri, new Cookie("session", session));
-
-            using var handler = new HttpClientHandler { CookieContainer = cookieContainer };
-            using var httpClient = new HttpClient(handler) { BaseAddress = baseUri };
+            using var httpClient = CreateHttpClient();
             using var newFile = File.Create(localFileName);
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"/{year}/day/{day}/input");
             var response = await httpClient.SendAsync(request);
             if (response.StatusCode != HttpStatusCode.OK)
@@ -57,18 +55,50 @@ namespace AdventOfCode.Utils
             await contentStream.CopyToAsync(newFile);
         }
 
+        public static async Task<bool> SubmitAnswer(int year, int day, int level, object answer)
+        {
+            if (string.IsNullOrWhiteSpace(Session))
+            {
+                throw new Exception("no session in ENV");
+            }
+
+            using var client = CreateHttpClient();
+            var uri = $"/{year}/day/{day}/answer";
+            var response = await client.PostAsync(uri, new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("level", level.ToString()),
+                new KeyValuePair<string, string>("answer", answer.ToString())
+            }));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"{response.StatusCode}");
+            }
+
+            return true;
+        }
+
+        private static HttpClient CreateHttpClient()
+        {
+            var baseUri = new Uri("https://adventofcode.com");
+            var cookieContainer = new CookieContainer();
+            cookieContainer.Add(baseUri, new Cookie("session", Session));
+
+            var handler = new HttpClientHandler { CookieContainer = cookieContainer };
+            var httpClient = new HttpClient(handler) { BaseAddress = baseUri };
+            return httpClient;
+        }
+
         public static async Task<Stream> GetInputStream(int year, int day)
         {
             const string topLevelPath = "../../../";
             var inputsDirectory = Directory.CreateDirectory(Path.Combine(topLevelPath, "Inputs", year.ToString()));
             var localFileName = Path.Combine(inputsDirectory.FullName, $"{day}.txt");
-            var session = Environment.GetEnvironmentVariable("aoc_session");
-
             var localFile = new FileInfo(localFileName);
 
             if (!localFile.Exists || localFile.Length == 0)
             {
-                await DownloadInput(session, localFileName, year, day);
+                await DownloadInput(localFileName, year, day);
             }
 
             return File.OpenRead(localFileName);

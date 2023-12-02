@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AoC2023;
 
@@ -25,9 +24,10 @@ namespace AdventOfCode
             new AoC2022.Day25(),
         };
 
-        private static readonly List<IAocDay> Days = new List<IAocDay>()
+        private static readonly List<IAocDay> Days2023 = new List<IAocDay>()
         {
             new Day1(),
+            //new Day2(),
             //new Day2(),
             //new Day3(),
             //new Day4(),
@@ -41,13 +41,8 @@ namespace AdventOfCode
 
         static async Task Main(string[] args)
         {
-            var reversed = Days2022.ToList();
-            reversed.Reverse();
-
-            foreach (var day in reversed)
-            {
-                Console.WriteLine($"{day.GetType()}\t1: {await day.Part1()}\t2: {await day.Part2()}");
-            }
+            var answer = await new Day2().Part1();
+            Console.WriteLine($"ANSWER: {answer}");
         }
     }
 }

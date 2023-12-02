@@ -58,7 +58,7 @@ namespace AoC2022
 
         public async Task<object> Part1()
         {
-            var input = await Input.GetInput(2022, 19);
+            var input = await IO.GetInput(2022, 19);
             foreach (var line in input)
             {
                 ReadInput(line);

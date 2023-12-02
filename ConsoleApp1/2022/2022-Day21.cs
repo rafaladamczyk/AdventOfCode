@@ -27,7 +27,7 @@ namespace AoC2022
 
         public async Task<object> Part1()
         {
-            var input = await Input.GetInput(2022, 21);
+            var input = await IO.GetInput(2022, 21);
             foreach (var line in input.Select(x => x.Split(':')))
             {
                 var monkeyName = line[0].Trim();

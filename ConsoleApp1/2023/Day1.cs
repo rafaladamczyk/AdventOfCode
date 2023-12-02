@@ -10,15 +10,17 @@ namespace AoC2023
     {
         public async Task<object> Part1()
         {
-            var input = await Input.GetInput(2023, 1);
+            var input = await IO.GetInput(2023, 1);
             var numbers = input.Select(x => (x.First(char.IsDigit), x.Last(char.IsDigit)))
                 .Select(x => int.Parse($"{x.Item1}{x.Item2}"));
+
+            await IO.SubmitAnswer(2023, 1, 1, numbers.Sum());
             return numbers.Sum();
         }
 
         public async Task<object> Part2()
         {
-            var input = await Input.GetInput(2023, 1);
+            var input = await IO.GetInput(2023, 1);
             var numbers = new List<int>();
             foreach (var line in input)
             {

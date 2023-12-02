@@ -19,7 +19,7 @@ namespace AoC2022
 
         public async Task<object> Part1()
         {
-            using var stream= await Input.GetInputStream(2022, 22);
+            using var stream= await IO.GetInputStream(2022, 22);
             using var reader = new StreamReader(stream);
 
             ReadInput(reader);

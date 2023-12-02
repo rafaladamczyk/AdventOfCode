@@ -114,7 +114,7 @@ namespace AoC2022
             Number prev = null;
             numbers.Clear();
 
-            var input = await Input.GetInput(2022, 20);
+            var input = await IO.GetInput(2022, 20);
             foreach (var line in input)
             {
                 var inputNumber = int.Parse(line.Trim());

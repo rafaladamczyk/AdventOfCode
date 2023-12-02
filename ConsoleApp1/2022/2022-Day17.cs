@@ -55,7 +55,7 @@ namespace AoC2022
             };
 
 
-            var input = await Input.GetInput(2022, 17);
+            var input = await IO.GetInput(2022, 17);
             windMovements = input.Single().ToCharArray();
 
             var minX = 0;
@@ -246,7 +246,7 @@ namespace AoC2022
 
         public async Task<object> Part2()
         {
-            return await Part1();
+            return "";
         }
     }
 }

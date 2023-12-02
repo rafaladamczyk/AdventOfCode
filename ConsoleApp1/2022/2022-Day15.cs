@@ -15,7 +15,7 @@ namespace AoC2022
         {
             const int limit = 4000000;
 
-            var input = await Input.GetInput(2022, 15);
+            var input = await IO.GetInput(2022, 15);
             var sensors = input.Select(inputLine => inputLine
                     .Split(' ').Select(x => x.Trim()).ToList())
                 .Select(line => new Sensor
@@ -118,7 +118,7 @@ namespace AoC2022
 
         public async Task<object> Part2()
         {
-            return await Part1(); //part1 is gone, only part2 remains
+            return ""; //part1 is gone, only part2 remains
         }
     }
 }

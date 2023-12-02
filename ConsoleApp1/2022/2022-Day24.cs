@@ -24,7 +24,7 @@ namespace AoC2022
         {
             char[,] map;
             List<Blizzard> blizzards = new List<Blizzard>();
-            var lines = await Input.GetInput(2022, 24);
+            var lines = await IO.GetInput(2022, 24);
 
             var rowLength = lines[0].Length;
             var colLength = lines.Count;

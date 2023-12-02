@@ -70,7 +70,7 @@ namespace AoC2022
 
         public async Task<object> Part1()
         {
-            var input = await Input.GetInput(2022, 23);
+            var input = await IO.GetInput(2022, 23);
             var rowLength = input.First().Length;
 
             var map = new char[rowLength, input.Count];

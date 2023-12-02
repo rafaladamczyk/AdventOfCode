@@ -13,7 +13,7 @@ namespace AoC2022
         public async Task<object> Part1()
         {
             var lavaCubes = new HashSet<(int x, int y, int z)>();
-            var input = await Input.GetInput(2022, 18);
+            var input = await IO.GetInput(2022, 18);
             foreach (var numbers in input.Select(line => line.Split(',').Select(x => int.Parse(x.Trim())).ToArray()))
             {
                 lavaCubes.Add((numbers[0], numbers[1], numbers[2]));

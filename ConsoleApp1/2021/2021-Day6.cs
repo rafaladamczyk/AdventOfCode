@@ -25,7 +25,7 @@ namespace AoC2021
 
         public async Task<object> Part1()
         {
-            var input = await Input.GetInput(2021, 8);
+            var input = await IO.GetInput(2021, 8);
             var lines = input.Select(x => x.Split('|')).Select(x => (x[0], x[1].Split(' ').Select(y => y.Trim()))).ToList();
             var outputDigits = lines.SelectMany(x => x.Item2).ToList();
             

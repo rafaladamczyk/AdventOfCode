@@ -8,14 +8,14 @@ namespace AoC2023
     {
         public async Task<object> Part1()
         {
-            var input = await Input.GetInput(2023, 2);
+            var input = await IO.GetInput(2023, 2);
             //var input = await Input.GetExampleInput();
             return "";
         }
 
         public async Task<object> Part2()
         {
-            var input = await Input.GetInput(2023, 2);
+            var input = await IO.GetInput(2023, 2);
             //var input = await Input.GetExampleInput();
             return "";
         }

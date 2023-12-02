@@ -40,7 +40,7 @@ namespace AoC2022
 
             var lines = new List<Line>();
             var maxY = 0;
-            var input = await Input.GetInput(2022, 14);
+            var input = await IO.GetInput(2022, 14);
 
             foreach (var inputLine in input)
             {

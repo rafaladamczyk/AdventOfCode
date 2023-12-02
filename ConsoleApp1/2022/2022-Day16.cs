@@ -33,7 +33,7 @@ namespace AoC2022
 
         public async Task<int> Run(int part)
         {
-            var input = await Input.GetInput(2022, 16);
+            var input = await IO.GetInput(2022, 16);
             foreach (var inputLine in input)
             {
                 var parts = inputLine.Split(' ');

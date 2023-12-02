@@ -13,7 +13,7 @@ namespace AoC2022
     {
         public async Task<object> Part1()
         {
-            var input = await Input.GetInput(2022, 25);
+            var input = await IO.GetInput(2022, 25);
             ulong acc = 0;
             var maxNumLen = 0;
 
