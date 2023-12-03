@@ -67,7 +67,7 @@ public class Day3 : IAocDay
                         if (n.x > 0 && n.y > 0 && n.x < input.Count && n.y < input[0].Length)
                         {
                             var nc = input[n.x][n.y];
-                            if (!char.IsDigit(nc) && nc == '*')
+                            if (nc == '*')
                             {
                                 number.considered = true;
                                 number.gears.Add(n);
@@ -79,12 +79,13 @@ public class Day3 : IAocDay
         }
 
         var gears = numbers.SelectMany(x => x.gears).ToList();
-        var blah = gears.ToLookup(x => gears.Count(y => y.Equals(x)));
-        var validGears = blah[2];
-        foreach (var g in validGears.Distinct())
+        var gearByNeighboringNumbersCount = gears.ToLookup(x => gears.Count(y => y.Equals(x)));
+        var validGears = gearByNeighboringNumbersCount[2].Distinct();
+        
+        foreach (var g in validGears)
         {
-            var ns = numbers.Where(x => x.gears.Any(x => x.Equals(g))).ToList();
-            answer += ns.Select(x => int.Parse(string.Join("", x.digits))).Aggregate(1, (i, j) => i * j);
+            var neighboringNumbers = numbers.Where(n => n.gears.Any(p => p.Equals(g))).ToList();
+            answer += neighboringNumbers.Select(x => int.Parse(string.Join("", x.digits))).Aggregate(1, (i, j) => i * j);
         }
 
         return answer;
@@ -97,7 +98,7 @@ public class Day3 : IAocDay
         {
             for (int y = 0; y < input[x].Length; y++)
             {
-                var number = new Number { points = new List<Point>(), digits = new List<int>() };
+                var number = new Number();
                 while (y < input[0].Length && char.IsDigit(input[x][y]))
                 {
                     var point = new Point(x, y);
