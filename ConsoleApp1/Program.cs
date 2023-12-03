@@ -7,6 +7,14 @@ namespace AdventOfCode
 {
     class Program
     {
+        static async Task Main(string[] args)
+        {
+            var answer = await new Day3().Part1();
+            var answer2 = await new Day3().Part2();
+            Console.WriteLine($"ANSWER: {answer}");
+            Console.WriteLine($"ANSWER: {answer2}");
+        }
+
         private static readonly List<IAocDay> Days2022 = new List<IAocDay>()
         {
             new AoC2022.Day13(),
@@ -27,7 +35,7 @@ namespace AdventOfCode
         private static readonly List<IAocDay> Days2023 = new List<IAocDay>()
         {
             new Day1(),
-            //new Day2(),
+            new Day2(),
             //new Day2(),
             //new Day3(),
             //new Day4(),
@@ -38,11 +46,5 @@ namespace AdventOfCode
             //new Day9(),
             //new Day10(),
         };
-
-        static async Task Main(string[] args)
-        {
-            var answer = await new Day2().Part1();
-            Console.WriteLine($"ANSWER: {answer}");
-        }
     }
 }

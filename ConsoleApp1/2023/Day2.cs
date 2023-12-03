@@ -19,7 +19,7 @@ namespace AoC2023
         public async Task<object> Part2()
         {
             var input = await IO.GetInput(2023, 2);
-            var games = input.Select(Power).Where(x => x != null).ToList();
+            var games = input.Select(Power).ToList();
             var answer = games.Sum();
             return answer;
         }
@@ -68,9 +68,8 @@ namespace AoC2023
             return id;
         }
 
-        public int? Power(string line)
+        public int Power(string line)
         {
-            var id = int.Parse(line.Split(":")[0].Replace("Game ", ""));
             var gameLine = line.Substring(line.IndexOf(":") + 1);
             var rounds = gameLine.Split(";").Select(x => x.Trim()).ToList();
 
