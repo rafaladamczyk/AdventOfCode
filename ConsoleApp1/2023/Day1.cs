@@ -14,7 +14,6 @@ namespace AoC2023
             var numbers = input.Select(x => (x.First(char.IsDigit), x.Last(char.IsDigit)))
                 .Select(x => int.Parse($"{x.Item1}{x.Item2}"));
 
-            await IO.SubmitAnswer(2023, 1, 1, numbers.Sum());
             return numbers.Sum();
         }
 

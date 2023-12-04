@@ -12,7 +12,7 @@ public class Day3 : IAocDay
     {
         public List<int> digits = new();
         public List<Point> points = new();
-        public List<Point> gears = new();
+        public List<Point> neighboringGears = new();
         public bool considered;
     }
 
@@ -70,7 +70,7 @@ public class Day3 : IAocDay
                             if (nc == '*')
                             {
                                 number.considered = true;
-                                number.gears.Add(n);
+                                number.neighboringGears.Add(n);
                             }
                         }
                     }
@@ -78,13 +78,13 @@ public class Day3 : IAocDay
             }
         }
 
-        var gears = numbers.SelectMany(x => x.gears).ToList();
+        var gears = numbers.SelectMany(x => x.neighboringGears).ToList();
         var gearByNeighboringNumbersCount = gears.ToLookup(x => gears.Count(y => y.Equals(x)));
         var validGears = gearByNeighboringNumbersCount[2].Distinct();
         
         foreach (var g in validGears)
         {
-            var neighboringNumbers = numbers.Where(n => n.gears.Any(p => p.Equals(g))).ToList();
+            var neighboringNumbers = numbers.Where(n => n.neighboringGears.Any(p => p.Equals(g))).ToList();
             answer += neighboringNumbers.Select(x => int.Parse(string.Join("", x.digits))).Aggregate(1, (i, j) => i * j);
         }
 

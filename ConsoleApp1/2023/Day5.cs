@@ -8,15 +8,19 @@ public class Day5 : IAocDay
 {
     public async Task<object> Part1()
     {
-        var input = await IO.GetInput(2023, 5);
-        //var input = await Input.GetExampleInput();
-        return "";
+        var input = await IO.GetInput(2023, 6);
+        var ans = 0;
+
+        await IO.SubmitAnswer(2023, 6, 1, ans);
+        return ans;
     }
 
     public async Task<object> Part2()
     {
-        var input = await IO.GetInput(2023, 5);
-        //var input = await Input.GetExampleInput();
-        return "";
+        var input = await IO.GetInput(2023, 6);
+        var ans = 0;
+
+        await IO.SubmitAnswer(2023, 6, 2, ans);
+        return ans;
     }
 }

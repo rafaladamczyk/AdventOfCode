@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode.Utils
+﻿using System.Collections.Generic;
+
+namespace AdventOfCode.Utils
 {
     public struct Point
     {
@@ -38,6 +40,14 @@
             }
         }
 
+        public IEnumerable<Point> GetNeighbors(bool includeDiagonal = false)
+        {
+            foreach (var dir in GetDirs(includeDiagonal))
+            {
+                yield return this + dir;
+            }
+        }
+
         public static Point[] GetDirs(bool includeDiagonals = false)
         {
             if (includeDiagonals)
@@ -67,16 +77,16 @@
         }
     }
 
-    public struct Point3D
+    public struct Point3d
     {
-        public Point3D()
+        public Point3d()
         {
             x = 0;
             y = 0;
             z = 0;
         }
 
-        public Point3D(int x, int y, int z)
+        public Point3d(int x, int y, int z)
         {
             this.x = x;
             this.y = y;
@@ -87,14 +97,40 @@
         public int y;
         public int z;
 
-        public static Point3D operator +(Point3D a, Point3D b) => new() { x = a.x + b.x, y = a.y + b.y, z = a.z + b.z };
-        public static Point3D operator -(Point3D a, Point3D b) => new() { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z };
+        public static Point3d operator +(Point3d a, Point3d b) => new() { x = a.x + b.x, y = a.y + b.y, z = a.z + b.z };
+        public static Point3d operator -(Point3d a, Point3d b) => new() { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z };
 
-        public static Point3D[] GetDirs(bool includeDiagonals = false)
+        public override bool Equals(object obj)
+        {
+            if (obj is not Point3d p)
+            {
+                return false;
+            }
+
+            return p.x == x && p.y == y && p.z == z;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return x ^ y ^ z;
+            }
+        }
+
+        public IEnumerable<Point3d> GetNeighbors(bool includeDiagonal = false)
+        {
+            foreach (var dir in GetDirs(includeDiagonal))
+            {
+                yield return this + dir;
+            }
+        }
+
+        public static Point3d[] GetDirs(bool includeDiagonals = false)
         {
             if (includeDiagonals)
             {
-                return new Point3D[]
+                return new Point3d[]
                 {
                     new(-1, -1, -1),
                     new(-1, -1, 0),
@@ -126,7 +162,7 @@
             }
             else
             {
-                return new Point3D[]
+                return new Point3d[]
                 {
                     new() { x = 1, y = 0, z = 0 },
                     new() { x = 0, y = 1, z = 0 },
@@ -139,5 +175,4 @@
             }
         }
     }
-
 }
