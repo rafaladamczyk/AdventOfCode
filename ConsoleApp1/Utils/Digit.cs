@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode.Utils
+﻿using System.Collections.Generic;
+
+namespace AdventOfCode.Utils
 {
     internal static class Digit
     {
@@ -15,6 +17,17 @@
             }
 
             return null;
+        }
+
+        public static Dictionary<int, int> ReverseDict(this Dictionary<int, int> dict)
+        {
+            var result = new Dictionary<int, int>();
+            foreach (var kvp in dict)
+            {
+                result[kvp.Value] = kvp.Key;
+            }
+
+            return result;
         }
     }
 }

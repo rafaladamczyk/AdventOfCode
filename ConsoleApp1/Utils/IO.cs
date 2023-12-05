@@ -62,6 +62,14 @@ namespace AdventOfCode.Utils
                 throw new Exception("no session in ENV");
             }
 
+            Console.WriteLine($"Answer: {answer} \t Submit (Y/N)?");
+            ConsoleKeyInfo key = Console.ReadKey();
+            if (key.Key != ConsoleKey.Y)
+            {
+                Console.WriteLine("Aborting");
+                return false;
+            }
+
             using var client = CreateHttpClient();
             var uri = $"/{year}/day/{day}/answer";
             var response = await client.PostAsync(uri, new FormUrlEncodedContent(new[]
