@@ -10,10 +10,7 @@ namespace AdventOfCode
     {
         static async Task Main(string[] args)
         {
-            var answer = await new Day5().Part1();
-            Console.WriteLine(answer);
-            var answer2 = await new Day5().Part2();
-            Console.WriteLine(answer2);
+            await PrintAnswers(new[] { new Day7() });
         }
 
         private static async Task PrintAnswers(IEnumerable<IAocDay> days)
@@ -54,9 +51,9 @@ namespace AdventOfCode
             new Day2(),
             new Day3(),
             new Day4(),
-            //new Day5(),
-            //new Day6(),
-            //new Day7(),
+            new Day5(),
+            new Day6(),
+            new Day7(),
             //new Day8(),
             //new Day9(),
             //new Day10(),

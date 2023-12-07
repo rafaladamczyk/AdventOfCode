@@ -4,8 +4,8 @@ using System.Diagnostics;
 
 namespace AdventOfCode.Utils;
 
-// both ends are inclusive
-[DebuggerDisplay("{s}-{e}")]
+// inclusive start, exclusive end
+[DebuggerDisplay("[{s}-{e})")]
 public struct Range
 {
     public ulong s;
@@ -13,29 +13,29 @@ public struct Range
 
     public Range(ulong s, ulong e)
     {
-        this.s = s <= e ? s : e;
-        this.e = e >= s ? e : s;
+        if (s < e)
+        {
+            this.s = 0;
+            this.e = 0;
+        }
+        else
+        {
+            this.s = s;
+            this.e = e;
+        }
     }
 
-    public bool Overlaps(Range other)
-    {
-        return s <= other.e && e >= other.s;
-    }
+    public ulong Length => e - s;
 
-    public static Range operator +(Range a, Range b) => a.Overlaps(b)
-        ? new Range { s = Math.Min(a.s, b.s), e = Math.Max(a.e, b.e) }
-        : throw new Exception("Ranges don't overlap");
-
-    public Range Intersect(Range other)
-    {
-        return Overlaps(other)
-            ? new Range (Math.Max(s, other.s), Math.Min(e, other.e))
-            : throw new Exception("Ranges don't overlap");
-    }
+    public Range Intersect(Range other) => new Range(Math.Max(s, other.s), Math.Min(e, other.e));
+    
+    public static List<Range> operator +(Range a, Range b) => a.Intersect(b).Length > 0
+        ? new List<Range>() { new(Math.Min(a.s, b.s), Math.Max(a.e, b.e)) }
+        : new List<Range>() { a, b };
 
     public IEnumerable<ulong> Enumerate()
     {
-        for (ulong i = s; i <= e; i++)
+        for (ulong i = s; i < e; i++)
         {
             yield return i;
         }
@@ -43,7 +43,7 @@ public struct Range
 
     public bool Contains(ulong item)
     {
-        return (s <= item) && (e >= item);
+        return (s <= item) && (e > item);
     }
 
     public override bool Equals(object obj)

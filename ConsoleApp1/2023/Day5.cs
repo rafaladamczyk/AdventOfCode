@@ -228,32 +228,33 @@ public class Day5 : IAocDay
 
     private IEnumerable<Range> GetMappedRanges(List<Range> sourceRanges, List<List<Range>> ranges)
     {
-        foreach (var sourceRange in sourceRanges)
-        {
-            foreach (var targetRange in ranges)
-            {
-                var src = targetRange[0];
-                var dst = targetRange[1];
+        yield break;
+        //foreach (var sourceRange in sourceRanges)
+        //{
+        //    foreach (var targetRange in ranges)
+        //    {
+        //        var src = targetRange[0];
+        //        var dst = targetRange[1];
 
-                if (src.Overlaps(sourceRange))
-                {
-                    var intersect = src.Intersect(sourceRange);
-                    var delta = intersect.s - src.s;
-                    var count = intersect.e - intersect.s;
+        //        if (src.Overlaps(sourceRange))
+        //        {
+        //            var intersect = src.Intersect(sourceRange);
+        //            var delta = intersect.s - src.s;
+        //            var count = intersect.e - intersect.s;
 
-                    var mappedTargets = new Range(dst.s + delta, dst.s + count);
-                    yield return mappedTargets;
+        //            var mappedTargets = new Range(dst.s + delta, dst.s + count);
+        //            yield return mappedTargets;
 
-                    // unmapped
-                    yield return new Range(sourceRange.s, intersect.s - 1);
-                    yield return new Range(intersect.e + 1, sourceRange.e);
-                }
-                else
-                {
-                    yield return sourceRange;
-                }
-            }
-        }
+        //            // unmapped
+        //            yield return new Range(sourceRange.s, intersect.s - 1);
+        //            yield return new Range(intersect.e + 1, sourceRange.e);
+        //        }
+        //        else
+        //        {
+        //            yield return sourceRange;
+        //        }
+        //    }
+        //}
     }
 
     private void ParseRangeIntoMaps(IList<ulong> rangeInfo, List<List<Range>> maps)
