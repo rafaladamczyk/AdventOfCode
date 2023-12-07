@@ -12,31 +12,31 @@ public class Day7 : IAocDay
 {
     public async Task<object> Part1()
     {
-        long ans = 0;
+        int ans = 0;
         var input = await IO.GetInput(2023, 7);
         
-        var cards = input.Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0]).Select(l => l.ToCharArray());
+        var cards = input.Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0]).Select(l => l.ToList());
         var bids = input.Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1]).Select(int.Parse);
 
         var hands = cards.Zip(bids).Select(i => new HandPart1(i.First, i.Second)).ToList();
         var ordered = hands.OrderBy(x => x).ToList();
         
-        ans = ordered.Select((x, rank) => ((long)rank + 1) * x.Bid).Sum();
+        ans = ordered.Select((x, rank) => (rank + 1) * x.Bid).Sum();
         return ans;
     }
 
     public async Task<object> Part2()
     {
-        long ans = 0;
+        int ans = 0;
         var input = await IO.GetInput(2023, 7);
 
-        var cards = input.Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0]).Select(l => l.ToCharArray());
+        var cards = input.Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0]).Select(l => l.ToList());
         var bids = input.Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1]).Select(int.Parse);
 
         var hands = cards.Zip(bids).Select(i => new HandPart2(i.First, i.Second)).ToList();
         var ordered = hands.OrderBy(x => x).ToList();
 
-        ans = ordered.Select((x, rank) => ((long)rank + 1) * x.Bid).Sum();
+        ans = ordered.Select((x, rank) => (rank + 1) * x.Bid).Sum();
         return ans;
     }
 }
@@ -44,7 +44,7 @@ public class Day7 : IAocDay
 [DebuggerDisplay("{AsString}")]
 public class HandPart1 : IComparable<HandPart1>
 {
-    public long Bid { get; }
+    public int Bid { get; }
     public readonly List<char> cards;
     public string AsString => string.Join("", cards);
 
@@ -53,7 +53,7 @@ public class HandPart1 : IComparable<HandPart1>
         return AsString;
     }
 
-    public Dictionary<char, int> cardToPoints = new Dictionary<char, int>()
+    public Dictionary<char, int> cardToPoints = new()
     {
         { 'A', 14 },
         { 'K', 13 },
@@ -70,10 +70,10 @@ public class HandPart1 : IComparable<HandPart1>
         { '2', 2 },
     };
 
-    public HandPart1(char[] cards, long bid)
+    public HandPart1(List<char> cards, int bid)
     {
         Bid = bid;
-        this.cards = cards.ToList();
+        this.cards = cards;
     }
 
     public int GetStrength()
@@ -118,15 +118,15 @@ public class HandPart1 : IComparable<HandPart1>
         if (ReferenceEquals(this, other)) return 0;
         if (ReferenceEquals(null, other)) return 1;
 
-        var rank = GetStrength();
-        var otherRank = other.GetStrength();
+        var strength = GetStrength();
+        var otherStrength = other.GetStrength();
 
-        if (rank > otherRank)
+        if (strength > otherStrength)
         {
             return 1;
         }
 
-        if (rank < otherRank)
+        if (strength < otherStrength)
         {
             return -1;
         }
@@ -151,7 +151,7 @@ public class HandPart1 : IComparable<HandPart1>
 [DebuggerDisplay("{AsString}")]
 public class HandPart2 : IComparable<HandPart2>
 {
-    public long Bid { get; }
+    public int Bid { get; }
     public readonly List<char> cards;
     public string AsString => string.Join("", cards);
 
@@ -160,7 +160,7 @@ public class HandPart2 : IComparable<HandPart2>
         return AsString;
     }
 
-    public Dictionary<char, int> cardToPoints = new Dictionary<char, int>()
+    public Dictionary<char, int> cardToPoints = new()
     {
         { 'A', 14 },
         { 'K', 13 },
@@ -177,10 +177,10 @@ public class HandPart2 : IComparable<HandPart2>
         { 'J', 1 },
     };
 
-    public HandPart2(char[] cards, long bid)
+    public HandPart2(List<char> cards, int bid)
     {
         Bid = bid;
-        this.cards = cards.ToList();
+        this.cards = cards;
     }
 
     public int GetStrength()
@@ -290,15 +290,15 @@ public class HandPart2 : IComparable<HandPart2>
         if (ReferenceEquals(this, other)) return 0;
         if (ReferenceEquals(null, other)) return 1;
 
-        var rank = GetStrength();
-        var otherRank = other.GetStrength();
+        var strength = GetStrength();
+        var otherStrength = other.GetStrength();
 
-        if (rank > otherRank)
+        if (strength > otherStrength)
         {
             return 1;
         }
 
-        if (rank < otherRank)
+        if (strength < otherStrength)
         {
             return -1;
         }
