@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AdventOfCode.Utils
 {
@@ -17,6 +18,23 @@ namespace AdventOfCode.Utils
             }
 
             return null;
+        }
+
+        public static ulong GDC(this ulong a, ulong b)
+        {
+            while (b != 0)
+            {
+                var x = b;
+                b = a % b;
+                a = x;
+            }
+
+            return a;
+        }
+
+        public static ulong LCM(this ulong a, ulong b)
+        {
+            return a / a.GDC(b) * b;
         }
 
         public static Dictionary<int, int> ReverseDict(this Dictionary<int, int> dict)

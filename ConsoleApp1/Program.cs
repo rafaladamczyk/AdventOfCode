@@ -10,7 +10,7 @@ namespace AdventOfCode
     {
         static async Task Main(string[] args)
         {
-            await PrintAnswers(new[] { new Day7() });
+            await PrintAnswers(Days2023);
         }
 
         private static async Task PrintAnswers(IEnumerable<IAocDay> days)
@@ -54,7 +54,7 @@ namespace AdventOfCode
             new Day5(),
             new Day6(),
             new Day7(),
-            //new Day8(),
+            new Day8(),
             //new Day9(),
             //new Day10(),
         };
