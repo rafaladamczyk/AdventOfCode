@@ -12,14 +12,12 @@ public class Day9 : IAocDay
     {
         var ans = 0;
         var input = await IO.GetInput(2023, 9);
-        //var input = await IO.GetExampleInput();
         var lines = input.Select(x => x.Split().Select(int.Parse).ToList()).ToList();
         foreach (var line in lines)
         {
             ans += PredictNextNumber(line);
         }
 
-        await IO.SubmitAnswer(2023, 9, 1, ans);
         return ans;
     }
 
@@ -27,7 +25,6 @@ public class Day9 : IAocDay
     {
         var ans = 0;
         var input = await IO.GetInput(2023, 9);
-        //var input = await IO.GetExampleInput();
 
         var lines = input.Select(x => x.Split().Select(int.Parse).ToList()).ToList();
         foreach (var line in lines)
@@ -35,7 +32,6 @@ public class Day9 : IAocDay
             ans += PredictPrevNumber(line);
         }
 
-        await IO.SubmitAnswer(2023, 9, 2, ans);
         return ans;
     }
 
