@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace AdventOfCode.Utils
 {
+    [DebuggerDisplay("{x},{y}")]
     public struct Point
     {
         public Point()
