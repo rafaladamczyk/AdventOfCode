@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AdventOfCode.Utils
 {
@@ -12,14 +14,14 @@ namespace AdventOfCode.Utils
             y = 0;
         }
 
-        public Point(int x, int y)
+        public Point(long x, long y)
         {
             this.x = x;
             this.y = y;
         }
 
-        public int x;
-        public int y;
+        public long x;
+        public long y;
 
         public static Point operator +(Point a, Point b) => new() { x = a.x + b.x, y = a.y + b.y };
         public static Point operator -(Point a, Point b) => new() { x = a.x - b.x, y = a.y - b.y };
@@ -38,7 +40,7 @@ namespace AdventOfCode.Utils
         {
             unchecked
             {
-                return x ^ y;
+                return x.GetHashCode() ^ y.GetHashCode();
             }
         }
 
@@ -75,6 +77,23 @@ namespace AdventOfCode.Utils
                     new() { x = -1, y = 0 },
                     new() { x = 0, y = -1 },
                 };
+            }
+        }
+
+        public static void PrintSparseGrid(List<Point> points)
+        {
+            var set = points.ToHashSet();
+            var maxR = points.Max(p => p.x);
+            var maxC = points.Max(p => p.y);
+
+            for (int r = 0; r <= maxR; r++)
+            {
+                for (int c = 0; c <= maxC; c++)
+                {
+                    Console.Write(set.Contains(new Point(r, c)) ? '#' : '.');
+                }
+
+                Console.WriteLine();
             }
         }
     }

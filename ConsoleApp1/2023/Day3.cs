@@ -33,7 +33,7 @@ public class Day3 : IAocDay
                         var n = point + dir;
                         if (n.x > 0 && n.y > 0 && n.x < input.Count && n.y < input[0].Length)
                         {
-                            var nc = input[n.x][n.y];
+                            var nc = input[(int)n.x][(int)n.y];
                             if (!char.IsDigit(nc) && nc != '.')
                             {
                                 answer += int.Parse($"{string.Join("", number.digits)}");
@@ -66,7 +66,7 @@ public class Day3 : IAocDay
                         var n = point + dir;
                         if (n.x > 0 && n.y > 0 && n.x < input.Count && n.y < input[0].Length)
                         {
-                            var nc = input[n.x][n.y];
+                            var nc = input[(int)n.x][(int)n.y];
                             if (nc == '*')
                             {
                                 number.considered = true;
