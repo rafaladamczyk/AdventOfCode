@@ -58,6 +58,7 @@ namespace AdventOfCode
             new Day9(),
             new Day10(),
             new Day11(),
+            new Day12(),
         };
     }
 }
