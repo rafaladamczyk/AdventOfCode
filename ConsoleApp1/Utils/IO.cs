@@ -19,6 +19,13 @@ namespace AdventOfCode.Utils
             return SplitIntoLines(stream).ToList();
         }
 
+        public static async Task<string> GetExampleInputString()
+        {
+            using var stream = await GetExampleStream();
+            using var reader = new StreamReader(stream);
+            return (await reader.ReadToEndAsync()).Replace($"{Environment.NewLine}", "\n");
+        }
+
         public static async Task<List<string>> GetExampleInput()
         {
             using var stream = await GetExampleStream();
@@ -110,6 +117,13 @@ namespace AdventOfCode.Utils
             }
 
             return File.OpenRead(localFileName);
+        }
+
+        public static async Task<string> GetInputString(int year, int day)
+        {
+            using var stream = await GetInputStream(year, day);
+            using var reader = new StreamReader(stream);
+            return await reader.ReadToEndAsync();
         }
 
         public static async Task<Stream> GetExampleStream()
