@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AdventOfCode.Utils
 {
-    internal static class Digit
+    internal static class Misc
     {
         public static readonly string[] Digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
@@ -47,5 +47,19 @@ namespace AdventOfCode.Utils
 
             return result;
         }
+
+        public static void Print(char[][] grid)
+        {
+            for (int r = 0; r < grid.Length; r++)
+            {
+                for (int c = 0; c < grid.Length; c++)
+                {
+                    Console.Write(grid[r][c]);
+                }
+
+                Console.WriteLine();
+            }
+        }
+
     }
 }
