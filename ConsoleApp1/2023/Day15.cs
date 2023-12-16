@@ -13,7 +13,6 @@ namespace AoC2023
         {
             var ans = 0;
             var input = await IO.GetInput(2023, 15);
-            //var input = await IO.GetExampleInput();
 
             var parts = input.Single().Split(',');
             foreach (var part in parts)
