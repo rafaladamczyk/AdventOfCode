@@ -62,15 +62,6 @@ namespace AoC2023
 
         private static int Energize(Beam startingBeam, char[][] grid)
         {
-            var gridPoints = new Dictionary<Point, char>();
-            for (var r = 0; r < grid.Length; r++)
-            {
-                for (var c = 0; c < grid.Length; c++)
-                {
-                    gridPoints.Add(new Point(r, c), grid[r][c]);
-                }
-            }
-
             var spawnPoints = new HashSet<(Point start, Point dir)>();
             var energized = new HashSet<Point>();
             var Q = new Queue<Beam>();
@@ -96,14 +87,14 @@ namespace AoC2023
                     energized.Add(currentPos);
 
                     var newPos = currentPos + beam.dir;
-                    if (!gridPoints.TryGetValue(newPos, out var gridPoint))
+                    if (newPos.x < 0 || newPos.x >= grid.Length || newPos.y < 0 || newPos.y >= grid[0].Length)
                     {
                         break; // outside the grid
                     }
 
                     beam.points.Add(newPos);
 
-                    switch (gridPoint)
+                    switch (grid[newPos.x][newPos.y])
                     {
                         case '|':
                             if (beam.dir.y != 0)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AoC2023;
@@ -16,11 +17,17 @@ namespace AdventOfCode
 
         private static async Task PrintAnswers(IEnumerable<IAocDay> days)
         {
+            var sw = new Stopwatch();
+
             foreach (var day in days)
             {
-                Console.WriteLine($"{day.GetType()} Part 1: {await day.Part1()}");
-                Console.WriteLine($"{day.GetType()} Part 2: {await day.Part2()}");
-                Console.WriteLine(string.Join("", Enumerable.Range(1,80).Select(x => "*")));
+                sw.Restart();
+                Console.WriteLine($"{day.GetType()} Part 1: {await day.Part1()} \t [{sw.Elapsed}]");
+
+                sw.Restart();
+                Console.WriteLine($"{day.GetType()} Part 2: {await day.Part2()} \t [{sw.Elapsed}]");
+
+                Console.WriteLine(string.Join("", Enumerable.Range(1, 80).Select(x => "*")));
             }
         }
 
