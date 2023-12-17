@@ -14,18 +14,18 @@ namespace AdventOfCode.Utils
             y = 0;
         }
 
-        public Point(long x, long y)
+        public Point(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
 
-        public long x;
-        public long y;
+        public int x;
+        public int y;
 
         public static Point operator +(Point a, Point b) => new() { x = a.x + b.x, y = a.y + b.y };
         public static Point operator -(Point a, Point b) => new() { x = a.x - b.x, y = a.y - b.y };
-        public static Point operator *(Point a, long x) => new() { x = a.x * x, y = a.y * x };
+        public static Point operator *(Point a, int x) => new() { x = a.x * x, y = a.y * x };
 
         public Point TurnLeft()
         {
@@ -56,7 +56,7 @@ namespace AdventOfCode.Utils
             throw new Exception();
         }
 
-        public static long ManhattanDistance(Point a, Point b)
+        public static int ManhattanDistance(Point a, Point b)
         {
             return Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
         }
