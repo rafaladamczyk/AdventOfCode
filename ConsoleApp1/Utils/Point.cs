@@ -25,6 +25,43 @@ namespace AdventOfCode.Utils
 
         public static Point operator +(Point a, Point b) => new() { x = a.x + b.x, y = a.y + b.y };
         public static Point operator -(Point a, Point b) => new() { x = a.x - b.x, y = a.y - b.y };
+        public static Point operator *(Point a, long x) => new() { x = a.x * x, y = a.y * x };
+
+        public Point TurnLeft()
+        {
+            if (x == 0)
+            {
+                if (y > 0)
+                {
+                    return new Point(-1, 0);
+                }
+                else
+                {
+                    return new Point(1, 0);
+                }
+            }
+
+            if (y == 0)
+            {
+                if (x > 0)
+                {
+                    return new Point(0, 1);
+                }
+                else
+                {
+                    return new Point(0, -1);
+                }
+            }
+
+            throw new Exception();
+        }
+
+        public static long ManhattanDistance(Point a, Point b)
+        {
+            return Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
+        }
+
+        public Point TurnRight() => TurnLeft() * -1;
 
         public override bool Equals(object obj)
         {

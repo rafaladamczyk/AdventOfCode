@@ -60,6 +60,5 @@ namespace AdventOfCode.Utils
                 Console.WriteLine();
             }
         }
-
     }
 }
