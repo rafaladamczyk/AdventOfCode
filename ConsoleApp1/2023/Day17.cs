@@ -73,7 +73,15 @@ namespace AoC2023
                 movesLeft = 10,
             };
 
+            var initialState2 = new State()
+            {
+                pos = new Point(0, 0),
+                dir = new Point(1, 0),
+                movesLeft = 10,
+            };
+
             Q.Enqueue(initialState, 0);
+            Q.Enqueue(initialState2, 0);
             while (Q.Count > 0)
             {
                 if (!Q.TryDequeue(out var state, out var totalHeat))
