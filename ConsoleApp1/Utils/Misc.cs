@@ -48,11 +48,22 @@ namespace AdventOfCode.Utils
             return result;
         }
 
+
+        public static bool PointInGrid(Point point, int[][] grid)
+        {
+            return point.x >= 0 && point.x < grid.Length && point.y >= 0 && point.y < grid[0].Length;
+        }
+
+        public static bool PointInGrid(Point point, char[][] grid)
+        {
+            return point.x >= 0 && point.x < grid.Length && point.y >= 0 && point.y < grid[0].Length;
+        }
+
         public static void Print(char[][] grid)
         {
             for (int r = 0; r < grid.Length; r++)
             {
-                for (int c = 0; c < grid.Length; c++)
+                for (int c = 0; c < grid[0].Length; c++)
                 {
                     Console.Write(grid[r][c]);
                 }

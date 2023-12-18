@@ -117,6 +117,31 @@ namespace AdventOfCode.Utils
             }
         }
 
+        public static char[][] GetSparseGrid(List<Point> points)
+        {
+            var set = points.ToHashSet();
+            var minR = points.Min(p => p.x);
+            var minC = points.Min(p => p.y);
+            var maxR = points.Max(p => p.x) + 1;
+            var maxC = points.Max(p => p.y) + 1;
+
+            var sizeR = Math.Abs(maxR - minR);
+            var sizeC = Math.Abs(maxC - minC);
+
+            var result = new char[sizeR][];
+
+            for (int r = 0; r < sizeR; r++)
+            {
+                result[r] = new char[sizeC];
+                for (int c = 0; c < sizeC; c++)
+                {
+                    result[r][c] = set.Contains(new Point(minR+r, minC+c)) ? '#' : '.';
+                }
+            }
+
+            return result;
+        }
+
         public static void PrintSparseGrid(List<Point> points)
         {
             var set = points.ToHashSet();

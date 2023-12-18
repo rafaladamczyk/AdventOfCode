@@ -45,7 +45,7 @@ namespace AoC2023
 
                 evaluated[state] = totalHeat;
 
-                foreach (var candidate in GenerateCandidates(state).Where(x => PointInGrid(x.pos, grid)))
+                foreach (var candidate in GenerateCandidates(state).Where(x => Misc.PointInGrid(x.pos, grid)))
                 {
                     var candidateHeat = grid[candidate.pos.x][candidate.pos.y];
                     Q.Enqueue(candidate, totalHeat + candidateHeat);
@@ -98,7 +98,7 @@ namespace AoC2023
 
                 evaluated[state] = totalHeat;
 
-                foreach (var candidate in GenerateCandidates2(state).Where(x => PointInGrid(x.pos, grid)))
+                foreach (var candidate in GenerateCandidates2(state).Where(x => Misc.PointInGrid(x.pos, grid)))
                 {
                     var candidateHeat = grid[candidate.pos.x][candidate.pos.y];
                     if (candidate.pos.Equals(destination) && candidate.movesLeft > 6)
@@ -168,11 +168,6 @@ namespace AoC2023
                     movesLeft = 9,
                 };
             }
-        }
-
-        public bool PointInGrid(Point point, int[][] grid)
-        {
-            return point.x >= 0 && point.x < grid.Length && point.y >= 0 && point.y < grid[0].Length;
         }
 
         [DebuggerDisplay("{Debug}")]
