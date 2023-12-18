@@ -10,15 +10,14 @@ namespace AoC2023
 {
     public class Day17 : IAocDay
     {
-        private const int Infinity = 10000000;
         public async Task<object> Part1()
         {
-            var ans = Infinity;
             var input = await IO.GetInput(2023, 17);
             //var input = await IO.GetExampleInput();
             var grid = input.Select(x => x.ToCharArray().Select(c => int.Parse($"{c}")).ToArray()).ToArray();
             var evaluated = new Dictionary<State, int>();
             var Q = new PriorityQueue<State, int>();
+            var destination = new Point(grid.Length - 1, grid[0].Length - 1);
             var initialState = new State()
             {
                 pos = new Point(0, 0),
@@ -32,6 +31,11 @@ namespace AoC2023
                 if (!Q.TryDequeue(out var state, out var totalHeat))
                 {
                     throw new Exception();
+                }
+
+                if (state.pos.Equals(destination))
+                {
+                    return totalHeat;
                 }
 
                 if (evaluated.ContainsKey(state))
@@ -48,18 +52,11 @@ namespace AoC2023
                 }
             }
 
-            var destination = new Point(grid.Length - 1, grid[0].Length - 1);
-            foreach (var kvp in evaluated.Where(kvp => kvp.Key.pos.Equals(destination)))
-            {
-                ans = Math.Min(ans, kvp.Value);
-            }
-
-            return ans;
+            throw new Exception("Should have gotten an answer by now");
         }
 
         public async Task<object> Part2()
         {
-            var ans = Infinity;
             var input = await IO.GetInput(2023, 17);
             //var input = await IO.GetExampleInput();
             var grid = input.Select(x => x.ToCharArray().Select(c => int.Parse($"{c}")).ToArray()).ToArray();
@@ -89,6 +86,11 @@ namespace AoC2023
                     throw new Exception();
                 }
 
+                if (state.pos.Equals(destination))
+                {
+                    return totalHeat;
+                }
+
                 if (evaluated.ContainsKey(state))
                 {
                     continue;
@@ -96,8 +98,7 @@ namespace AoC2023
 
                 evaluated[state] = totalHeat;
 
-                var candidates = GenerateCandidates2(state).Where(x => PointInGrid(x.pos, grid)).ToList();
-                foreach (var candidate in candidates)
+                foreach (var candidate in GenerateCandidates2(state).Where(x => PointInGrid(x.pos, grid)))
                 {
                     var candidateHeat = grid[candidate.pos.x][candidate.pos.y];
                     if (candidate.pos.Equals(destination) && candidate.movesLeft > 6)
@@ -109,12 +110,7 @@ namespace AoC2023
                 }
             }
 
-            foreach (var kvp in evaluated.Where(kvp => kvp.Key.pos.Equals(destination)))
-            {
-                ans = Math.Min(ans, kvp.Value);
-            }
-
-            return ans;
+            throw new Exception("Should have gotten an answer by now");
         }
 
         public IEnumerable<State> GenerateCandidates(State state)
