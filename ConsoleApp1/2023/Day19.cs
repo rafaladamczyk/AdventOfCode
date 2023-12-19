@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AdventOfCode;
 using AdventOfCode.Utils;
@@ -74,7 +73,7 @@ namespace AoC2023
                 {
                     foreach (var exp in nextRule.expressions)
                     {
-                        var nextLabel = exp.Compile().Invoke(part);
+                        var nextLabel = exp.Invoke(part);
                         if (nextLabel != null)
                         {
                             if (nextLabel == "A")
@@ -126,14 +125,7 @@ namespace AoC2023
                 foreach (var ruleString in ruleStrings)
                 {
                     bool hasExpression = ruleString.Contains(':');
-
-                    var expression = ruleString.Split(':')[0];
-                    var destLabel = ruleString.Split(':').Skip(1).FirstOrDefault() ?? ruleString;
-
-                    var c = hasExpression ? expression[0] : (char)0;
-                    var op = hasExpression ? expression[1] : -1;
-                    var number = hasExpression ? int.Parse(expression[2..]) : -1;
-
+                    var destLabel = hasExpression ? ruleString.Split(':')[1] : ruleString;
                     var connection = new ConditionalConnection { targetNode = nodes[destLabel] };
 
                     foreach (var compRange in complimentaryRanges)
@@ -143,6 +135,11 @@ namespace AoC2023
 
                     if (hasExpression)
                     {
+                        var expression = ruleString.Split(':')[0];
+                        var c = expression[0];
+                        var op = expression[1];
+                        var number = int.Parse(expression[2..]);
+
                         switch (op)
                         {
                             case '<':
@@ -162,36 +159,39 @@ namespace AoC2023
                 }
             }
 
-            IEnumerable<Dictionary<char, Range>> EnumerateAllPaths(Node start, Node dest, Dictionary<char, Range> conditions)
-            {
-                if (start == dest)
-                {
-                    yield return conditions;
-                }
-                else
-                {
-                    foreach (var node in start.connections)
-                    {
-                        var target = node.targetNode;
-                        var ranges = node.ranges;
-                        foreach (var kvp in ranges)
-                        {
-                            ranges[kvp.Key] = ranges[kvp.Key].Intersect(conditions[kvp.Key]);
-                        }
-
-                        foreach (var child in EnumerateAllPaths(target, dest, ranges))
-                        {
-                            yield return child;
-                        }
-                    }
-                }
-            }
-
             var rangeRequirements = EnumerateAllPaths(nodes["in"], nodes["A"],
                 DefaultRanges()).ToList();
 
             var permutations = rangeRequirements.Select(x => x['x'].Length * x['m'].Length * x['a'].Length * x['s'].Length).ToList();
             return permutations.Aggregate(0UL, (x, p) => x + p);
+        }
+
+        /// <summary>
+        /// Enumerates all paths between start and dest nodes. For each such path we return a dictionary of ranges for 'x','m','a','s' that need to be satisfied.
+        /// </summary>
+        private static IEnumerable<Dictionary<char, Range>> EnumerateAllPaths(Node start, Node dest, Dictionary<char, Range> startingConditions)
+        {
+            if (start == dest)
+            {
+                yield return startingConditions;
+            }
+            else
+            {
+                foreach (var node in start.connections)
+                {
+                    var target = node.targetNode;
+                    var ranges = node.ranges;
+                    foreach (var kvp in ranges)
+                    {
+                        ranges[kvp.Key] = ranges[kvp.Key].Intersect(startingConditions[kvp.Key]);
+                    }
+
+                    foreach (var child in EnumerateAllPaths(target, dest, ranges))
+                    {
+                        yield return child;
+                    }
+                }
+            }
         }
 
         private static Dictionary<char, Range> DefaultRanges()
@@ -223,7 +223,7 @@ namespace AoC2023
             }
 
             public string label;
-            public List<Expression<Func<Part, string>>> expressions = new();
+            public List<Func<Part, string>> expressions = new();
         }
 
         public class Node
