@@ -25,11 +25,8 @@ public class Day18 : IAocDay
 
             for (int i = 1; i <= amount; i++)
             {
-                var newPoint = points.Last() + dir;
-                if (!points[0].Equals(newPoint))
-                {
-                    points.Add(newPoint);
-                }
+                var newPoint = points[^1] + dir;
+                points.Add(newPoint);
             }
         }
 
@@ -74,7 +71,7 @@ public class Day18 : IAocDay
 
             for (int i = 1; i <= amount; i++)
             {
-                var newPoint = points.Last() + dir;
+                var newPoint = points[^1] + dir;
                 points.Add(newPoint);
             }
         }

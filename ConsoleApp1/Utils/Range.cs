@@ -15,13 +15,13 @@ public struct Range
     {
         if (s < e)
         {
-            this.s = 0;
-            this.e = 0;
+            this.s = s;
+            this.e = e;
         }
         else
         {
-            this.s = s;
-            this.e = e;
+            this.s = e;
+            this.e = s;
         }
     }
 
