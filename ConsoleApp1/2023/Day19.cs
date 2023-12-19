@@ -104,8 +104,7 @@ namespace AoC2023
         public async Task<object> Part2()
         {
             var ans = 0;
-            //var input = await IO.GetInputString(2023, 19);
-            var input = await IO.GetExampleInputString();
+            var input = await IO.GetInputString(2023, 19);
             var inputs = input.Split("\n\n");
             var rulesInput = inputs[0].Split();
 
@@ -121,42 +120,49 @@ namespace AoC2023
                 var label = ruleInput.Split('{')[0];
                 var ruleStrings = ruleInput.Split('{')[1].Trim('}').Split(',');
                 var node = nodes[label];
-                
+
+                var complimentaryRanges = DefaultRanges();
+
                 foreach (var ruleString in ruleStrings)
                 {
-                    if (!ruleString.Contains(':'))
-                    {
-                        node.connections.Add(new ConditionalConnection { targetNode = nodes[ruleString] });
-                        continue;
-                    }
+                    bool hasExpression = ruleString.Contains(':');
 
                     var expression = ruleString.Split(':')[0];
-                    var destLabel = ruleString.Split(':')[1];
+                    var destLabel = ruleString.Split(':').Skip(1).FirstOrDefault() ?? ruleString;
 
-                    var c = expression[0];
-                    var op = expression[1];
-                    var number = int.Parse(expression[2..]);
+                    var c = hasExpression ? expression[0] : (char)0;
+                    var op = hasExpression ? expression[1] : -1;
+                    var number = hasExpression ? int.Parse(expression[2..]) : -1;
 
                     var connection = new ConditionalConnection { targetNode = nodes[destLabel] };
-                    var index = connection.LetterIndex(c);
 
-                    switch (op)
+                    foreach (var compRange in complimentaryRanges)
                     {
-                        case '<':
-                            connection.ranges[index] = connection.ranges[index].Intersect(new Range(1, (ulong)number + 1));
-                            break;
-                        case '>':
-                            connection.ranges[index] = connection.ranges[index].Intersect(new Range((ulong)number, 4001));
-                            break;
-                        default:
-                            throw new NotImplementedException();
+                        connection.ranges[compRange.Key] = connection.ranges[compRange.Key].Intersect(compRange.Value);
+                    }
+
+                    if (hasExpression)
+                    {
+                        switch (op)
+                        {
+                            case '<':
+                                connection.ranges[c] = connection.ranges[c].Intersect(new Range(1, (ulong)number));
+                                complimentaryRanges[c] = complimentaryRanges[c].Intersect(new Range((ulong)number, 4001));
+                                break;
+                            case '>':
+                                connection.ranges[c] = connection.ranges[c].Intersect(new Range((ulong)number + 1, 4001));
+                                complimentaryRanges[c] = complimentaryRanges[c].Intersect(new Range(1, (ulong)number + 1));
+                                break;
+                            default:
+                                throw new NotImplementedException();
+                        }
                     }
 
                     node.connections.Add(connection);
                 }
             }
 
-            IEnumerable<Range[]> EnumerateAllPaths(Node start, Node dest, Range[] conditions)
+            IEnumerable<Dictionary<char, Range>> EnumerateAllPaths(Node start, Node dest, Dictionary<char, Range> conditions)
             {
                 if (start == dest)
                 {
@@ -167,10 +173,10 @@ namespace AoC2023
                     foreach (var node in start.connections)
                     {
                         var target = node.targetNode;
-                        var ranges = node.ranges.ToArray();
-                        for (int r = 0; r < ranges.Length; r++)
+                        var ranges = node.ranges;
+                        foreach (var kvp in ranges)
                         {
-                            ranges[r] = ranges[r].Intersect(conditions[r]);
+                            ranges[kvp.Key] = ranges[kvp.Key].Intersect(conditions[kvp.Key]);
                         }
 
                         foreach (var child in EnumerateAllPaths(target, dest, ranges))
@@ -182,9 +188,15 @@ namespace AoC2023
             }
 
             var rangeRequirements = EnumerateAllPaths(nodes["in"], nodes["A"],
-                Enumerable.Range(1, 4).Select(x => new Range(1, 4001)).ToArray()).ToList();
+                DefaultRanges()).ToList();
 
-            return 3;
+            var permutations = rangeRequirements.Select(x => x['x'].Length * x['m'].Length * x['a'].Length * x['s'].Length).ToList();
+            return permutations.Aggregate(0UL, (x, p) => x + p);
+        }
+
+        private static Dictionary<char, Range> DefaultRanges()
+        {
+            return new[] { 'x', 'm', 'a', 's' }.ToDictionary(x => x, x => new Range(1, 4001));
         }
 
         public struct Part
@@ -229,27 +241,10 @@ namespace AoC2023
         {
             public ConditionalConnection()
             {
-                ranges = Enumerable.Range(1, 4).Select(x => new Range(1, 4001)).ToArray();
+                ranges = DefaultRanges();
             }
             public Node targetNode;
-            public Range[] ranges;
-
-            public int LetterIndex(char c)
-            {
-                switch (c)
-                {
-                    case 'x':
-                        return 0;
-                    case 'm':
-                        return 1;
-                    case 'a':
-                        return 2;
-                    case 's':
-                        return 3;
-                    default:
-                        throw new Exception();
-                }
-            }
+            public Dictionary<char, Range> ranges;
         }
     }
 }
