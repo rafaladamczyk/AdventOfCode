@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AdventOfCode.Utils
 {
@@ -35,6 +36,17 @@ namespace AdventOfCode.Utils
         public static ulong LCM(this ulong a, ulong b)
         {
             return a / a.GDC(b) * b;
+        }
+
+        public static ulong LCM(params ulong[] xs)
+        {
+            var result = xs.Last();
+            for (int i = 0; i < xs.Length - 1; i++)
+            {
+                result = LCM(result, xs[i]);
+            }
+
+            return result;
         }
 
         public static Dictionary<int, int> ReverseDict(this Dictionary<int, int> dict)
