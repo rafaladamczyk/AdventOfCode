@@ -53,7 +53,7 @@ namespace AoC2023
                 grid[p.x][p.y] = 'O';
             }
 
-            Misc.Print(grid);
+            //Misc.Print(grid);
 
             return canReach.Count;
         }

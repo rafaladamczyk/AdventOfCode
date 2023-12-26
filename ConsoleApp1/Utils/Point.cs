@@ -160,6 +160,7 @@ namespace AdventOfCode.Utils
         }
     }
 
+    [DebuggerDisplay("{x},{y},{z}")]
     public struct Point3d
     {
         public Point3d()
@@ -197,7 +198,7 @@ namespace AdventOfCode.Utils
         {
             unchecked
             {
-                return x ^ y ^ z;
+                return (13 * x) ^  (11 * y) ^ z;
             }
         }
 
