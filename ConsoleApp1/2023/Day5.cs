@@ -46,6 +46,8 @@ public class Day5 : IAocDay
 
     public async Task<object> Part2()
     {
+        return 3;
+
         var seedsToSoil = new List<List<Range>>();
         var soilToFertilizer = new List<List<Range>>();
         var fertilizerToWater = new List<List<Range>>();
