@@ -259,4 +259,105 @@ namespace AdventOfCode.Utils
             }
         }
     }
+
+    [DebuggerDisplay("{x},{y},{z}")]
+    public struct Point3df
+    {
+        public Point3df()
+        {
+            x = 0;
+            y = 0;
+            z = 0;
+        }
+
+        public Point3df(double x, double y, double z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public double x;
+        public double y;
+        public double z;
+
+        public static Point3df operator +(Point3df a, Point3df b) => new() { x = a.x + b.x, y = a.y + b.y, z = a.z + b.z };
+        public static Point3df operator -(Point3df a, Point3df b) => new() { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z };
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not Point3df p)
+            {
+                return false;
+            }
+
+            return p.x == x && p.y == y && p.z == z;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (13 * x.GetHashCode()) ^ (11 * y.GetHashCode()) ^ z.GetHashCode();
+            }
+        }
+
+        public IEnumerable<Point3df> GetNeighbors(bool includeDiagonal = false)
+        {
+            foreach (var dir in GetDirs(includeDiagonal))
+            {
+                yield return this + dir;
+            }
+        }
+
+        public static Point3df[] GetDirs(bool includeDiagonals = false)
+        {
+            if (includeDiagonals)
+            {
+                return new Point3df[]
+                {
+                    new(-1, -1, -1),
+                    new(-1, -1, 0),
+                    new(-1, -1, 1),
+                    new(-1, 0, -1),
+                    new(-1, 0, 0),
+                    new(-1, 0, 1),
+                    new(-1, 1, -1),
+                    new(-1, 1, 0),
+                    new(-1, 1, 1),
+                    new(0, -1, -1),
+                    new(0, -1, 0),
+                    new(0, -1, 1),
+                    new(0, 0, -1),
+                    new(0, 0, 1),
+                    new(0, 1, -1),
+                    new(0, 1, 0),
+                    new(0, 1, 1),
+                    new(1, -1, -1),
+                    new(1, -1, 0),
+                    new(1, -1, 1),
+                    new(1, 0, -1),
+                    new(1, 0, 0),
+                    new(1, 0, 1),
+                    new(1, 1, -1),
+                    new(1, 1, 0),
+                    new(1, 1, 1)
+                };
+            }
+            else
+            {
+                return new Point3df[]
+                {
+                    new() { x = 1, y = 0, z = 0 },
+                    new() { x = 0, y = 1, z = 0 },
+                    new() { x = 0, y = 0, z = 1 },
+
+                    new() { x = -1, y = 0, z = 0 },
+                    new() { x = 0, y = -1, z = 0 },
+                    new() { x = 0, y = 0, z = -1 },
+                };
+            }
+        }
+    }
+
 }

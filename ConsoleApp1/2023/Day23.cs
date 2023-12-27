@@ -31,6 +31,8 @@ namespace AoC2023
             return globalMax;
         }
 
+        //TODO: compress the grid into a graph instead of brute forcing
+        //probably something like: 1. Find junctions. 2. Flood fill away from junctions until another junction is hit. 3. DFS the graph!
         public async Task<object> Part2()
         {
             var input = await IO.GetInput(2023, 23);

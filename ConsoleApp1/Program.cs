@@ -11,7 +11,7 @@ namespace AdventOfCode
     {
         static async Task Main(string[] args)
         {
-            await PrintAnswers(new[]{new Day23()});
+            await PrintAnswers(new[]{new Day24()});
             //await PrintAnswers(Days2023);
         }
 
@@ -77,6 +77,8 @@ namespace AdventOfCode
             new Day20(),
             new Day21(),
             new Day22(),
+            new Day23(),
+            new Day24(),
             new Day25(),
         };
     }
