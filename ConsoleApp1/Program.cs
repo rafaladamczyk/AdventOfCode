@@ -11,8 +11,8 @@ namespace AdventOfCode
     {
         static async Task Main(string[] args)
         {
-            //await PrintAnswers(new[]{new Day22()});
-            await PrintAnswers(Days2023);
+            await PrintAnswers(new[]{new Day23()});
+            //await PrintAnswers(Days2023);
         }
 
         private static async Task PrintAnswers(IEnumerable<IAocDay> days)
