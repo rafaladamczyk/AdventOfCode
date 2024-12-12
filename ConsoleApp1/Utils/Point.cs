@@ -158,6 +158,11 @@ namespace AdventOfCode.Utils
                 Console.WriteLine();
             }
         }
+
+        public override string ToString()
+        {
+            return $"'{this.x},{this.y}'";
+        }
     }
 
     [DebuggerDisplay("{x},{y},{z}")]
