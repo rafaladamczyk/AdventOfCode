@@ -16,7 +16,7 @@ namespace AdventOfCode
             await PrintAnswers(new[]{new AoC2024.Day3()});
             await PrintAnswers(new[]{new AoC2024.Day4()});
             await PrintAnswers(new[]{new AoC2024.Day5()});
-            await PrintAnswers(new[]{new AoC2024.Day6()});
+            //await PrintAnswers(new[]{new AoC2024.Day6()});
             await PrintAnswers(new[]{new AoC2024.Day7()});
             await PrintAnswers(new[]{new AoC2024.Day8()});
             await PrintAnswers(new[]{new AoC2024.Day9()});
