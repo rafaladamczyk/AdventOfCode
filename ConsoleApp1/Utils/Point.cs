@@ -142,7 +142,13 @@ namespace AdventOfCode.Utils
             return result;
         }
 
-        public static void PrintSparseGrid(List<Point> points)
+        public bool IsWithinGrid(int maxX, int maxY)
+        {
+            return x < maxX && y < maxY && x >= 0 && y >= 0;
+        }
+
+
+        public static void PrintSparseGrid(IReadOnlyCollection<Point> points)
         {
             var set = points.ToHashSet();
             var maxR = points.Max(p => p.x);
@@ -162,6 +168,11 @@ namespace AdventOfCode.Utils
         public override string ToString()
         {
             return $"'{this.x},{this.y}'";
+        }
+
+        public static bool AreColinear(Point a, Point b, Point c)
+        {
+            return (b.x - a.x) * (c.y - a.y) == (b.y - a.y) * (c.x - a.x);
         }
     }
 

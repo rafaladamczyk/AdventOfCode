@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AdventOfCode;
@@ -12,7 +13,7 @@ namespace AoC2024
         {
             var input = await IO.GetInput(2024, 6);
             var blockades = GetBlockades(input, out var start);
-            var visited = Walk(start, blockades, input[0].Length, input.Count, out _);
+            var visited = Walk(start, blockades, null, input[0].Length, input.Count, out _);
 
             return visited.Count;
         }
@@ -23,23 +24,22 @@ namespace AoC2024
 
             var blockades = GetBlockades(input, out var start);
 
-            var candidates = Walk(start, blockades, input[0].Length, input.Count, out _);
+            var candidates = Walk(start, blockades, null, input[0].Length, input.Count, out _);
             candidates.Remove(start.p);
             
-            var solves = new HashSet<Point>();
+            var solves = new ConcurrentBag<Point>();
 
-            foreach (var candidate in candidates)
+            var options = new ParallelOptions() { MaxDegreeOfParallelism = -1 };
+            Parallel.ForEach(candidates, options, candidate =>
             {
-                blockades.Add(candidate);
-                
-                Walk(start, blockades, input.Count, input[0].Length, out var looped);
+                Walk(start, blockades, candidate, input.Count, input[0].Length, out var
+                    looped);
+
                 if (looped)
                 {
                     solves.Add(candidate);
                 }
-
-                blockades.Remove(candidate);
-            }
+            });
 
             return solves.Count;
         }
@@ -70,7 +70,7 @@ namespace AoC2024
             return blockades;
         }
 
-        private static HashSet<Point> Walk((Point p, Point dir) start, HashSet<Point> blockades, int maxX, int maxY, out bool looped)
+        private static HashSet<Point> Walk((Point p, Point dir) start, HashSet<Point> blockades, Point? candidate, int maxX, int maxY, out bool looped)
         {
             var visited = new HashSet<(Point p, Point dir)>();
             var current = start;
@@ -81,6 +81,10 @@ namespace AoC2024
                 if (blockades.Contains(current.p + current.dir))
                 {
                     current.dir = current.dir.TurnLeft(); // maybe I should rename it, but it's called Left because it assumes different coordinate system.
+                }
+                else if (candidate != null && candidate.Value.Equals(current.p + current.dir))
+                {
+                    current.dir = current.dir.TurnLeft();
                 }
                 else
                 {
