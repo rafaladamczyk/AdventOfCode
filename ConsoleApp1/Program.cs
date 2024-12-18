@@ -19,7 +19,11 @@ namespace AdventOfCode
             //await PrintAnswers(new[]{new AoC2024.Day6()});
             await PrintAnswers(new[]{new AoC2024.Day7()});
             await PrintAnswers(new[]{new AoC2024.Day8()});
-            await PrintAnswers(new[]{new AoC2024.Day9()});
+            //await PrintAnswers(new[]{new AoC2024.Day9()});
+            await PrintAnswers(new[]{new AoC2024.Day10()});
+            await PrintAnswers(new[]{new AoC2024.Day11()});
+            await PrintAnswers(new[]{new AoC2024.Day12()});
+            await PrintAnswers(new[]{new AoC2024.Day13()});
         }
 
         private static async Task PrintAnswers(IEnumerable<IAocDay> days)
