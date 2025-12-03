@@ -27,7 +27,7 @@ namespace AoC2024
                 regions.Add(region);
             }
 
-            return regions.Sum(r => r.Area * r.Perimeter);
+            return regions.Sum(r => r.Area * r.Perimeter.Count);
         }
 
         private static Region ConstructRegion(Dictionary<Point, char> map, Point point, char symbol)
@@ -51,7 +51,7 @@ namespace AoC2024
                     }
                     else
                     {
-                        region.Perimeter++;
+                        region.Perimeter.Add(n);
                     }
                 }
             }
@@ -69,7 +69,7 @@ namespace AoC2024
             public char Symbol { get; }
             public HashSet<Point> Points { get; set; } = new HashSet<Point>();
             public int Area => Points.Count;
-            public int Perimeter { get; set; }
+            public List<Point> Perimeter { get; set; } = new List<Point>();
         }
 
         public async Task<object> Part2()
