@@ -69,7 +69,7 @@ namespace AoC2025
                 joltages.Add(ulong.Parse(joltage));
             }
 
-            return joltages.Aggregate(0UL, (acc, j) => acc += j);
+            return joltages.Aggregate(0UL, (acc, j) => acc + j);
         }
 
         private int MaxIndex(List<ulong> digits, int startIndex, int followedBy)

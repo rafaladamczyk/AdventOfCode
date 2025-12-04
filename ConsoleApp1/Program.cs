@@ -14,6 +14,7 @@ namespace AdventOfCode
             await PrintAnswers(new[]{new AoC2025.Day1()});
             await PrintAnswers(new[]{new AoC2025.Day2()});
             await PrintAnswers(new[]{new AoC2025.Day3()});
+            await PrintAnswers(new[]{new AoC2025.Day4()});
         }
 
         private static async Task PrintAnswers(IEnumerable<IAocDay> days)
