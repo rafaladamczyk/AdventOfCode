@@ -130,7 +130,7 @@ namespace AoC2023
 
                     foreach (var compRange in complimentaryRanges)
                     {
-                        connection.ranges[compRange.Key] = connection.ranges[compRange.Key].Intersect(compRange.Value);
+                        connection.ranges[compRange.Key] = connection.ranges[compRange.Key].Intersect(compRange.Value).Value;
                     }
 
                     if (hasExpression)
@@ -143,12 +143,12 @@ namespace AoC2023
                         switch (op)
                         {
                             case '<':
-                                connection.ranges[c] = connection.ranges[c].Intersect(new Range(1, (ulong)number));
-                                complimentaryRanges[c] = complimentaryRanges[c].Intersect(new Range((ulong)number, 4001));
+                                connection.ranges[c] = connection.ranges[c].Intersect(new Range(1, (ulong)number)).Value;
+                                complimentaryRanges[c] = complimentaryRanges[c].Intersect(new Range((ulong)number, 4001)).Value;
                                 break;
                             case '>':
-                                connection.ranges[c] = connection.ranges[c].Intersect(new Range((ulong)number + 1, 4001));
-                                complimentaryRanges[c] = complimentaryRanges[c].Intersect(new Range(1, (ulong)number + 1));
+                                connection.ranges[c] = connection.ranges[c].Intersect(new Range((ulong)number + 1, 4001)).Value;
+                                complimentaryRanges[c] = complimentaryRanges[c].Intersect(new Range(1, (ulong)number + 1)).Value;
                                 break;
                             default:
                                 throw new NotImplementedException();
@@ -183,7 +183,7 @@ namespace AoC2023
                     var ranges = node.ranges;
                     foreach (var kvp in ranges)
                     {
-                        ranges[kvp.Key] = ranges[kvp.Key].Intersect(startingConditions[kvp.Key]);
+                        ranges[kvp.Key] = ranges[kvp.Key].Intersect(startingConditions[kvp.Key]).Value;
                     }
 
                     foreach (var child in EnumerateAllPaths(target, dest, ranges))

@@ -27,11 +27,23 @@ public struct Range
 
     public ulong Length => e - s;
 
-    public Range Intersect(Range other) => new Range(Math.Max(s, other.s), Math.Min(e, other.e));
-    
-    public static List<Range> operator +(Range a, Range b) => a.Intersect(b).Length > 0
-        ? new List<Range>() { new(Math.Min(a.s, b.s), Math.Max(a.e, b.e)) }
-        : new List<Range>() { a, b };
+    public Range? Intersect(Range other)
+    {
+        if (e < other.s)
+        {
+            return null;
+        }
+
+        if (s > other.e)
+        {
+            return null;
+        }
+
+        return new Range(other.s, e);
+    }
+
+    public static Range? operator +(Range a, Range b) =>
+        a.Intersect(b) != null ? new Range(Math.Min(a.s, b.s), Math.Max(a.e, b.e)) : null;
 
     public IEnumerable<ulong> Enumerate()
     {
