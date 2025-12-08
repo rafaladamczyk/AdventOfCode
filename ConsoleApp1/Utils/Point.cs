@@ -200,6 +200,21 @@ namespace AdventOfCode.Utils
         public static Point3d operator +(Point3d a, Point3d b) => new() { x = a.x + b.x, y = a.y + b.y, z = a.z + b.z };
         public static Point3d operator -(Point3d a, Point3d b) => new() { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z };
 
+        public double EuclidianDistance(Point3d other)
+        {
+            var x2 = (long)(x - other.x) * (long)(x - other.x);
+            var y2 = (long)(y - other.y) * (long)(y - other.y);
+            var z2 = (long) (z - other.z) * (long)(z - other.z);
+            var distance = Math.Sqrt(x2 + y2 + z2);
+
+            if (double.IsNaN(distance))
+            {
+                throw new Exception("Nani");
+            }
+
+            return distance;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is not Point3d p)
@@ -214,7 +229,7 @@ namespace AdventOfCode.Utils
         {
             unchecked
             {
-                return (13 * x) ^  (11 * y) ^ z;
+                return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
             }
         }
 
@@ -224,6 +239,11 @@ namespace AdventOfCode.Utils
             {
                 yield return this + dir;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"'{this.x},{this.y}',{this.z}";
         }
 
         public static Point3d[] GetDirs(bool includeDiagonals = false)
