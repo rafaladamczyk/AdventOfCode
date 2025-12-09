@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AdventOfCode;
 using AdventOfCode.Utils;
@@ -79,16 +80,7 @@ namespace AoC2025
                         new Point(Math.Min(a.x, b.x), Math.Max(a.y, b.y))
                     };
 
-                    var cornersAreInside = true;
-                    foreach (var p in rect)
-                    {
-                        if (!IsInPolygon(p, redPoints))
-                        {
-                            cornersAreInside = false;
-                            break;
-                        }
-                    }
-
+                    var cornersAreInside = rect.All(p => IsInPolygon(p, redPoints));
                     if (!cornersAreInside)
                     {
                         continue;
@@ -102,20 +94,7 @@ namespace AoC2025
                         new Edge(rect[3], rect[0])
                     };
 
-                    var edgesAreInside = true;
-                    foreach (var edge in edges)
-                    {
-                        foreach (var re in rectangleEdges)
-                        {
-                            if (Edge.EdgesIntersect(re, edge))
-                            {
-                                edgesAreInside = false;
-                                goto End;
-                            }
-                        }
-                    }
-
-                    End:
+                    var edgesAreInside = rectangleEdges.All(re => edges.All(e => !Edge.EdgesIntersect(re, e)));
                     if (edgesAreInside)
                     {
                         var area = (ulong)(1 + Math.Abs(a.x - b.x)) * (ulong)(1 + Math.Abs(a.y - b.y));
