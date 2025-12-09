@@ -5,6 +5,43 @@ using System.Linq;
 
 namespace AdventOfCode.Utils
 {
+    public readonly struct Edge
+    {
+        public readonly Point A, B;
+
+        public Edge(Point a, Point b)
+        {
+            A = a;
+            B = b;
+        }
+
+        public static bool EdgesIntersect(Edge e1, Edge e2)
+        {
+            int s1 = Side(e1.A, e1.B, e2.A);
+            int s2 = Side(e1.A, e1.B, e2.B);
+            int s3 = Side(e2.A, e2.B, e1.A);
+            int s4 = Side(e2.A, e2.B, e1.B);
+
+            // opposite sides for both segments means we are crossing the edge (as opposed to touching it at the corner, for instance)
+            if (s1 * s2 < 0 && s3 * s4 < 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        static int Side(Point a, Point b, Point c)
+        {
+            long v = (long)(b.x - a.x) * (c.y - a.y)
+                     - (long)(b.y - a.y) * (c.x - a.x);
+
+            if (v > 0) return 1;
+            if (v < 0) return -1;
+            return 0;
+        }
+    }
+
     [DebuggerDisplay("{x},{y}")]
     public struct Point
     {
