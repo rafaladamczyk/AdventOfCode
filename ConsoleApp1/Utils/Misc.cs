@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace AdventOfCode.Utils
 {
@@ -83,5 +84,75 @@ namespace AdventOfCode.Utils
                 Console.WriteLine();
             }
         }
+
+        public readonly struct ListOfIntsKey : IEquatable<ListOfIntsKey>
+        {
+            private readonly ulong[] ulongs;
+
+            public ListOfIntsKey(IReadOnlyCollection<int> integers)
+            {
+                var max = integers.Max();
+                ulongs = new ulong[(max / 64) + 1];
+
+                foreach (int v in integers)
+                {
+                    ulongs[v / 64] |= 1UL << (v % 64);
+                }
+            }
+
+            public bool Equals(ListOfIntsKey other)
+            {
+                if (ulongs.Length != other.ulongs.Length)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < ulongs.Length; i++)
+                {
+                    if (ulongs[i] != other.ulongs[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            public override bool Equals(object? obj) => obj is ListOfIntsKey other && Equals(other);
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    int hash = 17;
+                    foreach (ulong w in ulongs)
+                    {
+                        hash = hash * 31 + w.GetHashCode();
+                    }
+
+                    return hash;
+                }
+            }
+
+            public IEnumerable<int> ToIntegers()
+            {
+                for (int i = 0; i < ulongs.Length; i++)
+                {
+                    ulong buckets = ulongs[i];
+
+                    while (buckets != 0)
+                    {
+                        // Find index of lowest set bit
+                        int bit = BitOperations.TrailingZeroCount(buckets);
+
+                        yield return i * 64 + bit;
+
+                        // Clear the lowest set bit
+                        buckets &= buckets - 1;
+                    }
+                }
+            }
+        }
+
     }
 }
