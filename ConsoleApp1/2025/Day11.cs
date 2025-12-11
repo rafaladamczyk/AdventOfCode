@@ -23,12 +23,12 @@ namespace AoC2025
             var allNodes = ReadNodesFromInput(input);
 
             var toFft = Solve(allNodes["svr"], "fft", new() { "dac" });
-            var fftDac = Solve(allNodes["fft"], "dac", new() { "srv", "out" });
-            var dacOut = Solve(allNodes["dac"], "out", new() { "fft, srv" });
+            var fftDac = Solve(allNodes["fft"], "dac");
+            var dacOut = Solve(allNodes["dac"], "out", new() { "fft" });
 
             var toDac = Solve(allNodes["svr"], "dac", new() { "fft" });
-            var dacFft = Solve(allNodes["dac"], "fft", new() { "srv", "out" });
-            var fftOut = Solve(allNodes["fft"], "out", new () { "dac, srv" });
+            var dacFft = Solve(allNodes["dac"], "fft");
+            var fftOut = Solve(allNodes["fft"], "out", new () { "dac"} );
 
             return toFft * fftDac * dacOut + toDac * dacFft * fftOut;
         }
