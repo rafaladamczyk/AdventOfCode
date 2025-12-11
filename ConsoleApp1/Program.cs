@@ -13,6 +13,7 @@ namespace AdventOfCode
         {
             await PrintAnswers(new IAocDay[]
             {
+                new AoC2025.Day11(),
                 new AoC2025.Day10(),
                 new AoC2025.Day9(),
                 new AoC2025.Day8(),
