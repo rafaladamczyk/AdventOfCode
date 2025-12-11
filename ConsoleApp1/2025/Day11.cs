@@ -11,30 +11,7 @@ namespace AoC2025
         public async Task<object> Part1()
         {
             var input = await IO.GetInput(2025, 11);
-            var allNodes = new Dictionary<string, Node>();
-
-            foreach (var line in input)
-            {
-                var split = line.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                var name = split[0];
-                if (!allNodes.TryGetValue(name, out var node))
-                {
-                    node = new() { Name = split[0], Connections = new() };
-                    allNodes[name] = node;
-                }
-
-                foreach (var c in split[1].Split(' ',
-                             StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-                {
-                    if (!allNodes.TryGetValue(c, out var nextNode))
-                    {
-                        nextNode = new() { Name = c, Connections = new() };
-                        allNodes[c] = nextNode;
-                    }
-
-                    node.Connections.Add(nextNode);
-                }
-            }
+            var allNodes = ReadNodesFromInput(input);
 
             var ans = Solve(allNodes["you"], "out");
             return ans;
@@ -43,30 +20,7 @@ namespace AoC2025
         public async Task<object> Part2()
         {
             var input = await IO.GetInput(2025, 11);
-            var allNodes = new Dictionary<string, Node>();
-
-            foreach (var line in input)
-            {
-                var split = line.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                var name = split[0];
-                if (!allNodes.TryGetValue(name, out var node))
-                {
-                    node = new() { Name = split[0], Connections = new() };
-                    allNodes[name] = node;
-                }
-
-                foreach (var c in split[1].Split(' ',
-                             StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-                {
-                    if (!allNodes.TryGetValue(c, out var nextNode))
-                    {
-                        nextNode = new() { Name = c, Connections = new() };
-                        allNodes[c] = nextNode;
-                    }
-
-                    node.Connections.Add(nextNode);
-                }
-            }
+            var allNodes = ReadNodesFromInput(input);
 
             var toFft = Solve(allNodes["svr"], "fft", new() { "dac" });
             var fftDac = Solve(allNodes["fft"], "dac", new() { "srv", "out" });
@@ -84,6 +38,36 @@ namespace AoC2025
         {
             var memo = new Dictionary<string, ulong>();
             return SolveInternal(0, start, target, memo, bannedNodes);
+        }
+
+        private static Dictionary<string, Node> ReadNodesFromInput(List<string> input)
+        {
+            var allNodes = new Dictionary<string, Node>();
+
+            foreach (var line in input)
+            {
+                var split = line.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var name = split[0];
+                if (!allNodes.TryGetValue(name, out var node))
+                {
+                    node = new() { Name = split[0], Connections = new() };
+                    allNodes[name] = node;
+                }
+
+                foreach (var c in split[1].Split(' ',
+                             StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                {
+                    if (!allNodes.TryGetValue(c, out var nextNode))
+                    {
+                        nextNode = new() { Name = c, Connections = new() };
+                        allNodes[c] = nextNode;
+                    }
+
+                    node.Connections.Add(nextNode);
+                }
+            }
+
+            return allNodes;
         }
 
         public ulong SolveInternal(int currentDepth, Node currentNode, string target, Dictionary<string, ulong> answers, List<string> bannedNodes = null)
